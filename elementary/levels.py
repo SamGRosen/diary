@@ -3,9 +3,9 @@ from datetime import datetime
 
 def level(logged):
 
-    def level_wrapper(text, *args, **kwargs):
+    def level_wrapper(text, reporter, *args, **kwargs):
 
-        print("[{name}]:[{time}]: {text}".format(
+        reporter("[{name}]:[{time}]: {text}".format(
             name=logged.__name__.upper(),
             time=str(datetime.now()),
             text=text.strip()
@@ -22,20 +22,15 @@ def info(text, **kwargs):
 
 @level
 def warn(text, **kwargs):
-    print("Proceed with caution")
+    pass
 
 
 @level
 def error(text, **kwargs):
     if kwargs.get("raises", False):
         raise kwargs.get("e_type", Exception)(text)
-    pass
-    
+
+
 @level
 def debug(text, **kwargs):
     pass
-
-info("hi")
-debug("no show")
-warn("uh oh")
-error("nooooo")

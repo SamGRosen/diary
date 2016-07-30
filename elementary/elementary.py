@@ -1,6 +1,5 @@
 from threading import Timer
-from levels import info, warn, error, debug as \
-    _info, _warn, _error, _debug
+from levels import info, warn, error, debug
 
 
 class Elementary(object):
@@ -27,26 +26,29 @@ class Elementary(object):
         """ Set a timer to run a function at every interval """
         self.timer = Timer(interval, func, *args, **kwargs)
 
-    def log(self, info, level=None):
-        output = level(info)
-        self.write(output)
+    def write(self, text):
+        print(text)
+
+    def log(self, info, level=info):
+        output = level(info, self.write)
 
     def info(self, info):
-        self.log(info, level=_info)
+        self.log(info, level=info)
 
     def warn(self, info):
-        self.log(info, level=_warn)
+        self.log(info, level=warn)
 
     def error(self, info):
-        self.log(info, level=_error)
+        self.log(info, level=error)
 
     def debug(self, info):
         if self.debug_enabled:
-            self.log(info, level=_debug)
+            self.log(info, level=debug)
 
 
 if __name__ == '__main__':
     # from elementary import Elementary as el
     el = Elementary
     example_el = el("")
-    example_el.log("")
+    example_el.log("hello")
+    example_el.warn("oh no")
