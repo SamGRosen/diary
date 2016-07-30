@@ -1,15 +1,8 @@
-from datetime import datetime
-
-
 def level(logged):
 
     def level_wrapper(text, reporter, *args, **kwargs):
 
-        reporter("[{name}]:[{time}]: {text}".format(
-            name=logged.__name__.upper(),
-            time=str(datetime.now()),
-            text=text.strip()
-        ))
+        reporter(logged, text)
         return logged(text, *args, **kwargs)
 
     return level_wrapper
