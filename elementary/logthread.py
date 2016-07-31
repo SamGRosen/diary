@@ -1,7 +1,7 @@
 from threading import Thread
 try:
     from queue import Queue
-except ImportError:
+except ImportError:  # python 2
     from Queue import Queue
 
 

@@ -5,7 +5,7 @@ import formats
 class Elementary(object):
     """ Elementary is a low-dependency and easy to use logger """
 
-    def __init__(self, path, format=formats.standard, async=False):
+    def __init__(self, path, format=formats.standard, async=False, debug=True):
         """
         Initialization takes a file path meant to make startup simple
         :param path: str of a path pointing to -
@@ -16,11 +16,12 @@ class Elementary(object):
             * A nonexistent path for assumed writing
         :param format: function to format logging info (see formats.py)
         :param async: boolean if logging should occur in own thread
+        :param debug: boolean if logger supports debugging
         """
         self.path = path
         self.format = format
         self.async = async
-        self.debug_enabled = True
+        self.debug_enabled = debug
         if async:
             from logthread import ElemThread
             self.thread = ElemThread(self)
@@ -79,7 +80,9 @@ class Elementary(object):
 if __name__ == '__main__':
     # from elementary import Elementary as el
     el = Elementary
-    help(el)
     example_el = el("", format=formats.easy_read, async=True)
     example_el.log("hello")
     example_el.warn("oh no")
+
+    while True:
+        pass
