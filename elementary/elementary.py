@@ -22,7 +22,8 @@ class Elementary(object):
         self.async = async
         self.debug_enabled = True
         if async:
-            from .thread import ElemThread
+            from logthread import ElemThread
+            self.thread = ElemThread(self)
 
     def set_timer(self, interval, func, *args, **kwargs):
         """Set a timer to run a function at every interval"""
@@ -39,7 +40,10 @@ class Elementary(object):
         :param info: info for logging
         :param level: @level decorated function handle relevant behavior
         """
-        level(info, self.write)
+        if self.async:
+            level(info, self.thread.add)
+        else:
+            level(info, self.write)
 
     def info(self, info):
         """Log general info
@@ -76,6 +80,6 @@ if __name__ == '__main__':
     # from elementary import Elementary as el
     el = Elementary
     help(el)
-    example_el = el("", format=formats.easy_read)
+    example_el = el("", format=formats.easy_read, async=True)
     example_el.log("hello")
     example_el.warn("oh no")
