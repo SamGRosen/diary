@@ -27,10 +27,13 @@ class Elementary(object):
             self.thread = ElemThread(self)
 
     def set_timer(self, interval, func, *args, **kwargs):
-        """Set a timer to run a function at every interval"""
-        from threading import Timer
+        """Set a timer to log an event at every interval"""
+        if self.async is False:
+            raise Exception("In order to set a timer async must be enabled")
 
-        self.timer = Timer(interval, func, *args, **kwargs)
+        from RepeatedTimer import RepeatedTimer
+        self.timer = RepeatedTimer(interval, func, *args, **kwargs)
+        self.timer.start()
 
     def write(self, level, text):
         print(self.format(level, text))
@@ -84,5 +87,9 @@ if __name__ == '__main__':
     example_el.log("hello")
     example_el.warn("oh no")
 
-    while True:
-        pass
+    def p():
+        print("thread")
+    example_el.set_timer(1, p)
+    from time import sleep
+    sleep(2)
+    print("should exit")
