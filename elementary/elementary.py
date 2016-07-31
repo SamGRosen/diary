@@ -1,4 +1,3 @@
-from threading import Timer
 import levels
 import formats
 
@@ -27,6 +26,8 @@ class Elementary(object):
 
     def set_timer(self, interval, func, *args, **kwargs):
         """Set a timer to run a function at every interval"""
+        from threading import Timer
+
         self.timer = Timer(interval, func, *args, **kwargs)
 
     def write(self, level, text):
