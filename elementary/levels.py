@@ -22,24 +22,38 @@ def level(logged):
 
 @level
 def info(text):
-    """The most generic level of logging. No special behavior needed."""
+    """The most generic level of logging. No special behavior needed.
+
+    :param text: str of log message
+    """
     pass
 
 
 @level
-def warn(text, **kwargs):
-    """A level of logging for info that may have side effects."""
+def warn(text):
+    """A level of logging for info that may have side effects.
+
+    :param text: str of log message
+    """
     pass
 
 
 @level
-def error(text, **kwargs):
-    """A level of information that may have caused an error"""
-    if kwargs.get("raises", False):
-        raise kwargs.get("e_type", Exception)(text)
+def error(text, raises=False, e_type=Exception):
+    """A level of information that may have caused an error.
+
+    :param text: str of error message and log
+    :param raises: boolean of whether or not an error should be raised
+    :param e_type: exception type to be raised
+    """
+    if raises:
+        raise e_type(text)
 
 
 @level
-def debug(text, **kwargs):
-    """A level of info pertinent to developers but not to users"""
+def debug(text):
+    """A level of info pertinent to developers but not to users.
+
+    :param text: str of log message
+    """
     pass
