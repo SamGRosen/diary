@@ -83,7 +83,7 @@ class Elementary(object):
 if __name__ == '__main__':
     # from elementary import Elementary as el
     el = Elementary
-    example_el = el("", format=formats.alarms, async=True)
+    example_el = el("", format=formats.easy_read, async=True)
     example_el.log("hello")
     example_el.warn("oh no")
     example_el.error("NOOOOO")
