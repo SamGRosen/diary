@@ -31,6 +31,17 @@ def min(level, text):
         text=text.strip()
     )
 
+def alarms(level, text):
+    """A format to emphasize important logs
+    ex: !!INFO!!
+    """
+    seperators = "!!" if level.__name__ == 'error' else "-"
+    return "{sep}{name}{sep}{dt}{sep}{text}{sep}".format(
+        sep=seperators,
+        name=level.__name__.upper(),
+        text=text.strip(),
+        dt=datetime.datetime.now()
+    )
 
 def easy_read(level, text):
     """An easier to read format
