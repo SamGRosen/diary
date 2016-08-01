@@ -5,18 +5,18 @@ except ImportError:  # python 2
     from Queue import Queue
 
 
-class ElemThread(Thread):
+class DiaryThread(Thread):
     """A thread for logging as to not disrupt the logged application"""
 
-    def __init__(self, elem, name="Elementary Logger"):
+    def __init__(self, diary, name="Diary Logger"):
         """Construct a thread for logging
 
-        :param elem: An Elementary instance to handle logging
+        :param diary: An Diary instance to handle logging
         :param name: A string to represent this thread
         """
         Thread.__init__(self, name=name)
         self.daemon = True  # py2 constructor requires explicit
-        self.elem = elem
+        self.diary = diary
         self.queue = Queue()
         self.start()
 
@@ -27,4 +27,4 @@ class ElemThread(Thread):
     def run(self):
         """Main for thread to run"""
         while True:
-            self.elem.write(self.queue.get())
+            self.diary.write(self.queue.get())
