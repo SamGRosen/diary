@@ -1,59 +1,60 @@
 """
 Levels are classifications of logs, typically based on their importance
-levels take a text parameter and any number of keyword arguments
+levels take an event parameter and any number of keyword arguments
 @level
-def example_level(text, **kwargs):
+def example_level(event, **kwargs):
     # do some behavior
 """
 
+from functools import wraps
 
 def level(logged):
     """
     Decorator to automatically log an event based on level.
     Decorated functions handle appropriate behavior.
     """
-    def level_wrapper(text, reporter, *args, **kwargs):
-
-        reporter(logged, text)
-        return logged(text, *args, **kwargs)
+    @wraps(logged)
+    def level_wrapper(event, reporter, *args, **kwargs):
+        reporter(event)
+        return logged(event, *args, **kwargs)
 
     return level_wrapper
 
 
 @level
-def info(text):
+def info(event):
     """The most generic level of logging. No special behavior needed.
 
-    :param text: str of log message
+    :param event: event instance
     """
     pass
 
 
 @level
-def warn(text):
+def warn(event):
     """A level of logging for info that may have side effects.
 
-    :param text: str of log message
+    :param event: event instance
     """
     pass
 
 
 @level
-def error(text, raises=False, e_type=Exception):
+def error(event, raises=False, e_type=Exception):
     """A level of information that may have caused an error.
 
-    :param text: str of error message and log
+    :param event: error event instance
     :param raises: boolean of whether or not an error should be raised
     :param e_type: exception type to be raised
     """
     if raises:
-        raise e_type(text)
+        raise e_type(event)
 
 
 @level
-def debug(text):
+def debug(event):
     """A level of info pertinent to developers but not to users.
 
-    :param text: str of log message
+    :param event: event instance
     """
     pass

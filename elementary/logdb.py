@@ -16,15 +16,15 @@ class LoggerDB():
         except sqlite3.OperationalError:
             pass
 
-    def log(self, text, level):
-        if type(level) is FunctionType:
-            level_text = level.__name__.upper()
+    def log(self, event):
+        if type(event.level) is FunctionType:
+            level_text = event.level.__name__.upper()
         else:
-            level_text = str(level)
+            level_text = str(event.level)
         self.cursor.execute('''
                             INSERT INTO logs(inputDT, level, log)
                                              VALUES(?, ?, ?)''',
-                            (dt.now(), level_text, text))
+                            (event.dt, level_text, event.info))
 
 if __name__ == '__main__':
     pass

@@ -20,11 +20,11 @@ class ElemThread(Thread):
         self.queue = Queue()
         self.start()
 
-    def add(self, level, text):
+    def add(self, event):
         """Add a logged event to queue for logging"""
-        self.queue.put((level, text))
+        self.queue.put(event)
 
     def run(self):
         """Main for thread to run"""
         while True:
-            self.elem.write(*self.queue.get())
+            self.elem.write(self.queue.get())

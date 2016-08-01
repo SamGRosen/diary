@@ -1,11 +1,11 @@
 import levels
 import formats
-
+import events
 
 class Elementary(object):
     """ Elementary is a low-dependency and easy to use logger """
 
-    def __init__(self, path, format=formats.standard, async=False, debug=True):
+    def __init__(self, path, event=events.Event, format=formats.standard, async=False, debug=True):
         """
         Initialization takes a file path meant to make startup simple
         :param path: str of a path pointing to -
@@ -19,6 +19,7 @@ class Elementary(object):
         :param debug: boolean if logger supports debugging
         """
         self.path = path
+        self.event = event
         self.format = format
         self.async = async
         self.debug_enabled = debug
@@ -35,8 +36,8 @@ class Elementary(object):
         self.timer = RepeatedTimer(interval, func, *args, **kwargs)
         self.timer.start()
 
-    def write(self, level, text):
-        print(self.format(level, text))
+    def write(self, event):
+        print(self.format(event))
 
     def log(self, info, level=levels.info):
         """Log info to its relevant level (see levels.py)
@@ -44,10 +45,11 @@ class Elementary(object):
         :param info: info for logging
         :param level: @level decorated function handle relevant behavior
         """
+        event_to_log = self.event(info, level)
         if self.async:
-            level(info, self.thread.add)
+            level(event_to_log, self.thread.add)
         else:
-            level(info, self.write)
+            level(event_to_log, self.write)
 
     def info(self, info):
         """Log general info
