@@ -24,8 +24,8 @@ class Diary(object):
         self.async = async
         self.debug_enabled = debug
         if async:
-            from logthread import ElemThread
-            self.thread = ElemThread(self)
+            from logthread import DiaryThread
+            self.thread = DiaryThread(self)
 
     def set_timer(self, interval, func, *args, **kwargs):
         """Set a timer to log an event at every interval"""
