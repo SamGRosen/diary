@@ -1,6 +1,8 @@
+from logdb import LoggerDB
 import levels
 import formats
 import events
+
 
 class Diary(object):
     """ Diary is a low-dependency and easy to use logger """
@@ -19,6 +21,7 @@ class Diary(object):
         :param debug: boolean if logger supports debugging
         """
         self.path = path
+        self.logdb = LoggerDB(path)  # TODO Handle path to not assume db
         self.event = event
         self.format = format
         self.async = async
@@ -37,6 +40,7 @@ class Diary(object):
         self.timer.start()
 
     def write(self, event):
+        self.logdb.log(event)
         print(self.format(event))
 
     def log(self, info, level=levels.info):
@@ -89,9 +93,7 @@ if __name__ == '__main__':
     example_el.log("hello")
     example_el.warn("oh no")
     example_el.error("NOOOOO")
-    def p():
-        print("thread")
-    example_el.set_timer(1, p)
+
     from time import sleep
     sleep(2)
     print("should exit")
