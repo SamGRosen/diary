@@ -19,7 +19,7 @@ class DiaryThread(Thread):
         Thread.__init__(self, name=name)
         self.daemon = True  # py2 constructor requires explicit
         self.diary = diary
-        self.sets_db=True
+        self.sets_db = sets_db
         self.queue = Queue()
         self.start()
 

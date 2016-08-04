@@ -34,7 +34,7 @@ class Diary(object):
             self.set_db()
 
     def set_db(self):
-        """ In order to keep databases thread safe set_db is called by self.thread if async is enabled. """
+        """In order to keep databases thread safe set_db is called by self.thread if async is enabled."""
         self.logdb = self.db(self.path)
 
     def set_timer(self, interval, func, *args, **kwargs):
