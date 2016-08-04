@@ -8,11 +8,13 @@ def example_level(event, **kwargs):
 
 from functools import wraps
 
+
 def level(logged):
     """
     Decorator to automatically log an event based on level.
     Decorated functions handle appropriate behavior.
     """
+
     @wraps(logged)
     def level_wrapper(event, reporter, *args, **kwargs):
         reporter(event)

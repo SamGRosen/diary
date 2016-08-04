@@ -20,19 +20,15 @@ class LoggerDB():
         self.cursor = self.conn.cursor()
         self.create_table()
 
-    def create_table(self, table_name="logs"):
+    def create_table(self):
         """
         Create a table to accomodate an event class. Attempts to create
         the table but if the table already exists the program continues.
 
-        :param table_name: a str of what the table should be called
         """
-        try:
-            self.cursor.execute('''
-                    CREATE TABLE ? (inputDT TIMESTAMP, level TEXT, log TEXT)
-                ''', (table_name,))
-        except sqlite3.OperationalError:
-            pass  # Table is already made
+        self.cursor.execute('''
+                CREATE TABLE logs (inputDT TIMESTAMP, level TEXT, log TEXT)
+            ''')
 
     def log(self, event):
         """

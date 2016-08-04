@@ -7,7 +7,7 @@ import events
 class Diary(object):
     """ Diary is a low-dependency and easy to use logger """
 
-    def __init__(self, path, event=events.Event, format=formats.standard, async=False, debug=True):
+    def __init__(self, path, event=events.Event, log_format=formats.standard, db=LoggerDB, async=False, debug=True):
         """
         Initialization takes a file path meant to make startup simple
         :param path: str of a path pointing to -
@@ -16,19 +16,26 @@ class Diary(object):
             * A database file where Diary will read and write
             * A directory with a database and txt file
             * A nonexistent path for assumed writing
-        :param format: function to format logging info (see formats.py)
+        :param log_format: function to format logging info (see formats.py)
+        :param db: database class for reading/writing database
         :param async: boolean if logging should occur in own thread
         :param debug: boolean if logger supports debugging
         """
         self.path = path
-        self.logdb = LoggerDB(path)  # TODO Handle path to not assume db
         self.event = event
-        self.format = format
+        self.format = log_format
+        self.db = db
         self.async = async
         self.debug_enabled = debug
         if async:
             from logthread import DiaryThread
-            self.thread = DiaryThread(self)
+            self.thread = DiaryThread(self, sets_db=True)
+        else:
+            self.set_db()
+
+    def set_db(self):
+        """ In order to keep databases thread safe set_db is called by self.thread if async is enabled. """
+        self.logdb = self.db(self.path)
 
     def set_timer(self, interval, func, *args, **kwargs):
         """Set a timer to log an event at every interval"""
@@ -89,7 +96,7 @@ class Diary(object):
 if __name__ == '__main__':
     # from Diary import Diary
     el = Diary
-    example_el = el("", format=formats.easy_read, async=True)
+    example_el = el("", log_format=formats.easy_read, async=True)
     example_el.log("hello")
     example_el.warn("oh no")
     example_el.error("NOOOOO")

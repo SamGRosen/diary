@@ -1,5 +1,6 @@
 output
 **/__pycache__/**
+**/.idea/**
 *.pyc
 .pypirc
 /dist/
