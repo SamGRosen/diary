@@ -25,8 +25,8 @@ class TestLoggerDB(unittest.TestCase):
     def test_creates_table_already_exists(self):
         self.logdb.create_table()
         tables = self.logdb.cursor.execute('''SELECT name FROM sqlite_master
-                                             WHERE type="table" AND name="logs"
-                                          ''').fetchall()
+                                              WHERE type="table" AND name="logs"
+                                           ''').fetchall()
         self.assertEquals(len(tables), 1)
 
     def test_log(self):

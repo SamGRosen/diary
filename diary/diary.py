@@ -12,7 +12,7 @@ class Diary(object):
 
     def __init__(self, path, file_name="diary.txt", db_name="diary.db",
                  event=events.Event, log_format=formats.standard,
-                 db=logdb.LoggerDB, async=False, debug=True):
+                 db=logdb.LoggerDB, async=True, debug=True):
         """
         Initialization takes a file path meant to make startup simple
         :param path: str of a path pointing to:

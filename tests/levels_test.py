@@ -1,4 +1,3 @@
-from __future__ import print_function
 from diary import levels
 import unittest
 
@@ -65,3 +64,6 @@ class TestLevel(unittest.TestCase):
             levels.error(self.INFO, reporter, raises=True, e_type=ValueError)
 
         self.assertEquals(self.report_count + 1, report_count)
+
+if __name__ == '__main__':
+    unittest.main()

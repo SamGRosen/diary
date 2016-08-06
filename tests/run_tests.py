@@ -12,15 +12,16 @@ import logdb_test
 
 if __name__ == '__main__':
     # Setup test objects
-    loader = unittest.TestLoader()
-    load_func = loader.loadTestsFromTestCase
     all_tests = unittest.TestSuite()
+    loader = unittest.TestLoader()
+    easy_load = lambda test_case: all_tests.addTests(
+        loader.loadTestsFromTestCase(test_case))
 
     # Add tests
-    all_tests.addTests(load_func(events_test.TestEvent))
-    all_tests.addTests(load_func(logdb_test.TestLoggerDB))
-    all_tests.addTests(load_func(formats_test.TestFormat))
-    all_tests.addTests(load_func(levels_test.TestLevel))
+    easy_load(events_test.TestEvent)
+    easy_load(formats_test.TestFormat)
+    easy_load(levels_test.TestLevel)
+    easy_load(logdb_test.TestLoggerDB)
 
     # Run tests
     results = unittest.TestResult()
