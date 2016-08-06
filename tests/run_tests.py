@@ -6,6 +6,7 @@ sys.path.append(os.path.join('..', 'diary'))
 # Import test dependencies
 import unittest
 import events_test
+import logdb_test
 
 if __name__ == '__main__':
     # Setup test objects
@@ -15,9 +16,14 @@ if __name__ == '__main__':
 
     # Add tests
     all_tests.addTests(load_func(events_test.TestEvent))
+    all_tests.addTests(load_func(logdb_test.TestLoggerDB))
 
     # Run tests
     results = unittest.TestResult()
     all_tests.run(results)
 
-    assert len(results.errors) == 0 and len(results.failures) == 0
+    if not(len(results.errors) == 0 and len(results.failures) == 0):
+        for e in results.errors:
+            print(''.join(map(str, e)))
+        for f in results.failures:
+            print(''.join(map(str, f)))
