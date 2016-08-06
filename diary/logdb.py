@@ -24,10 +24,10 @@ class LoggerDB():
         """
         Create a table to accomodate an event class. Attempts to create
         the table but if the table already exists the program continues.
-
         """
         self.cursor.execute('''
-                CREATE TABLE logs (inputDT TIMESTAMP, level TEXT, log TEXT)
+                CREATE TABLE IF NOT EXISTS logs
+                (inputDT TIMESTAMP, level TEXT, log TEXT)
             ''')
 
     def log(self, event):
@@ -46,3 +46,7 @@ class LoggerDB():
                                 INSERT INTO logs(inputDT, level, log)
                                                  VALUES(?, ?, ?)''',
                                 (event.dt, level_text, event.info))
+
+    def close(self):
+        """Close the connection"""
+        self.conn.close()

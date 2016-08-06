@@ -23,7 +23,6 @@ class DiaryThread(Thread):
         self.queue = Queue()
         self.start()
 
-
     def add(self, event):
         """Add a logged event to queue for logging"""
         self.queue.put(event)
