@@ -7,6 +7,7 @@ sys.path.append(os.path.join('..', 'diary'))
 import unittest
 import events_test
 import logdb_test
+import formats_test
 
 if __name__ == '__main__':
     # Setup test objects
@@ -17,6 +18,7 @@ if __name__ == '__main__':
     # Add tests
     all_tests.addTests(load_func(events_test.TestEvent))
     all_tests.addTests(load_func(logdb_test.TestLoggerDB))
+    all_tests.addTests(load_func(formats_test.TestFormat))
 
     # Run tests
     results = unittest.TestResult()

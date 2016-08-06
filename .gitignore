@@ -4,3 +4,4 @@ output
 *.pyc
 .pypirc
 /dist/
+tests/testing_dir/perm.db # Do not update with testing

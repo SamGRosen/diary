@@ -2,9 +2,11 @@ import unittest
 import datetime as dt
 from diary import events
 
+
 class TestEvent(unittest.TestCase):
     INFO = "something was logged"
     LEVEL = "CRITICAL"
+
     def setUp(self):
         self.event = events.Event(self.INFO, self.LEVEL)
 

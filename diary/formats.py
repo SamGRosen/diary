@@ -7,13 +7,22 @@ Format functions take an event instance parameter
         return "Level: {} {}".format(event.level, event.dt, event.info)
 """
 
+from types import FunctionType
+
+
+def stringify_level(l):
+    if type(l) is FunctionType:
+        return l.__name__.upper()
+    else:
+        return str(l)
+
 
 def standard(event):
     """A simple default format
     ex: [INFO]:[2016-07-30 20:18:09.401149]: example text
     """
     return "[{name}]:[{time}]: {text}".format(
-        name=event.level.__name__.upper(),
+        name=stringify_level(event.level),
         time=event.dt,
         text=event.info.strip()
     )
@@ -25,7 +34,7 @@ def min(event):
     """
     return "{name}: {0:%x} {0:%X}: {text}".format(
         event.dt,
-        name=event.level.__name__.upper(),
+        name=stringify_level(event.level),
         text=event.info.strip()
     )
 
@@ -34,10 +43,10 @@ def alarms(event):
     """A format to emphasize important logs
     ex: !!ERROR!!2016-07-31 21:55:00.165649!!NOOOOO!!
     """
-    seperators = "!!" if event.level.__name__ == 'error' else "-"
+    seperators = "!!!" if stringify_level(event.level) == 'ERROR' else " - "
     return "{sep}{name}{sep}{dt}{sep}{text}{sep}".format(
         sep=seperators,
-        name=event.level.__name__.upper(),
+        name=stringify_level(event.level),
         text=event.info.strip(),
         dt=event.dt
     )
@@ -49,6 +58,6 @@ def easy_read(event):
     """
     return "|{name}| On {0:%x} @ {0:%I:%M.%S%p} | {text}".format(
         event.dt,
-        name=event.level.__name__.upper(),
+        name=stringify_level(event.level),
         text=event.info.strip()
     )
