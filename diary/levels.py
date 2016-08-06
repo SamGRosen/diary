@@ -2,7 +2,7 @@
 Levels are classifications of logs, typically based on their importance
 levels take an event parameter and any number of keyword arguments
 @level
-def example_level(event, **kwargs):
+def example_level(event):
     # do some behavior
 """
 
