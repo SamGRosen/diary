@@ -28,7 +28,7 @@ class LoggerDB():
         self.cursor.execute('''
                 CREATE TABLE IF NOT EXISTS logs
                 (inputDT TIMESTAMP, level TEXT, log TEXT)
-            ''')
+                            ''')
 
     def log(self, event):
         """

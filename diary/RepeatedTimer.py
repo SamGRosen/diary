@@ -5,7 +5,7 @@ except ImportError:  # python3
 
 
 class RepeatedTimer(_Timer):
-    """ RepeatedTimer overrides threading.Timer to run multiple times """
+    """RepeatedTimer overrides threading.Timer to run multiple times"""
 
     def __init__(self, interval, func, *args, **kwargs):
         _Timer.__init__(self, interval, func, *args, **kwargs)

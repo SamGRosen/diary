@@ -7,8 +7,6 @@ Format functions take an event instance parameter
         return "Level: {} {}".format(event.level, event.dt, event.info)
 """
 
-import datetime
-
 
 def standard(event):
     """A simple default format

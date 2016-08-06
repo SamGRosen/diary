@@ -50,17 +50,16 @@ class Diary(object):
                     self.log_file = open(path, 'a')
                 else:
                     raise ValueError("Could not handle path: {} | {}".format(
-                                     path,
-                                     "Does not have a correct name or ext"))
+                        path, "Does not have a correct name or extension"))
             else:
-                raise ValueError("Could not handle path: {} | {}".format(path,
-                                                                         "Was not found a directory or file"))
+                raise ValueError("Could not handle path: {} | {}".format(
+                    path, "Was not found a directory or file"))
         else:
             try:
                 self.log_file = open(path, 'a')
             except Exception as e:
-                raise e("Could not handle path: {} | ".format(path,
-                                                              "Access denied: Could not create file"))
+                raise e("Could not handle path: {} | ".format(
+                    path, "Access denied: Could not create file"))
 
         @atexit.register
         def cleanup():

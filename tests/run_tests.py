@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.path.join('..', 'diary'))
 
-# Import test dependencies
+# Import test cases
 import unittest
 import events_test
 import logdb_test
