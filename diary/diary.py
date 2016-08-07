@@ -49,8 +49,8 @@ class Diary(object):
                 elif tail == file_name or ext[1:] in ('txt', 'text', 'log'):
                     self.log_file = open(path, 'a')
                 else:
-                    raise ValueError("Could not handle path: {} | {}".format(
-                        path, "Does not have a correct name or extension"))
+                    raise ValueError("Could not resolve to database or text file {}".format(
+                        path))
             else:
                 raise ValueError("Could not handle path: {} | {}".format(
                     path, "Was not found a directory or file"))
@@ -58,8 +58,7 @@ class Diary(object):
             try:
                 self.log_file = open(path, 'a')
             except Exception as e:
-                raise e("Could not handle path: {} | ".format(
-                    path, "Access denied: Could not create file"))
+                raise e
 
         @atexit.register
         def cleanup():
@@ -68,7 +67,9 @@ class Diary(object):
                 self.log_file.close()
             if self.db_file:
                 self.db_file.close()
-                self.db.close()
+                if self.async:
+                    self.thread.join()
+                self.logdb.close()
 
         self.close = cleanup
         self.event = event
@@ -76,6 +77,9 @@ class Diary(object):
         self.db = db
         self.async = async
         self.debug_enabled = debug
+
+        self.logdb = None
+        self.last_logged_event = None
 
         sets_db = self.db_file is not None
         if async:
@@ -111,6 +115,7 @@ class Diary(object):
             self.logdb.log(event)
         if self.log_file:
             self.log_file.write(self.format(event))
+        self.last_logged_event = event
 
     def log(self, info, level=levels.info):
         """Log info to its relevant level (see levels.py)

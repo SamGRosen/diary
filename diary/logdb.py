@@ -47,6 +47,26 @@ class DiaryDB():
                                                  VALUES(?, ?, ?)''',
                                 (event.dt, level_text, event.info))
 
+    def assert_event_logged(self, log, level='*', limit=-1):
+        """Testing method to ensure an event is logged
+
+        :param log: log text to look
+        :param level: info text to look for - * for any level
+        :param limit: how far back to look in logs
+        :asserts: if an event with given parameters is logged
+        """
+        entries = self.cursor.execute('''
+            SELECT * FROM logs WHERE log=(?) AND level=(?) ORDER BY
+            inputDT ASC LIMIT (?)''', (log, level, limit))
+        assert bool(entries.fetchone())
+
     def close(self):
         """Close the connection"""
         self.conn.close()
+
+    def __enter__(self):
+        return self
+
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()

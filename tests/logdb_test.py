@@ -32,7 +32,7 @@ class TestDiaryDB(unittest.TestCase):
     def test_log(self):
         self.logdb.log(self.SIMPLE_EVENT)
         entry = self.logdb.cursor.execute('''SELECT * FROM logs ORDER BY
-                                             inputDT DESC LIMIT 1''').fetchone()
+                                             inputDT ASC LIMIT 1''').fetchone()
         self.assertEquals(entry[0], self.SIMPLE_EVENT.dt)
         self.assertEquals(entry[1], self.SIMPLE_EVENT.level)
         self.assertEquals(entry[2], self.SIMPLE_EVENT.info)
