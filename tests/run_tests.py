@@ -5,6 +5,7 @@ sys.path.append(os.path.join('..', 'diary'))
 
 # Import test cases
 import unittest
+import diary_test
 import events_test
 import formats_test
 import levels_test
@@ -18,6 +19,7 @@ if __name__ == '__main__':
         loader.loadTestsFromTestCase(test_case))
 
     # Add tests
+    easy_load(diary_test.TestDiary)
     easy_load(events_test.TestEvent)
     easy_load(formats_test.TestFormat)
     easy_load(levels_test.TestLevel)
@@ -27,7 +29,7 @@ if __name__ == '__main__':
     results = unittest.TestResult()
     all_tests.run(results)
 
-    if not(len(results.errors) == 0 and len(results.failures) == 0):
+    if not (len(results.errors) == 0 and len(results.failures) == 0):
         for e in results.errors:
             print(''.join(map(str, e)))
         for f in results.failures:

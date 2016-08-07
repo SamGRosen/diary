@@ -1,4 +1,4 @@
-from diary import logdb, events
+from diary import DiaryDB, Event
 import unittest
 import sqlite3
 import os.path
@@ -7,10 +7,10 @@ import os.path
 class TestDiaryDB(unittest.TestCase):
     FIXED_DB_PATH = os.path.join(os.path.dirname(__file__),
                                  'testing_dir', 'perm.db')
-    SIMPLE_EVENT = events.Event("INFO", "LEVEL")
+    SIMPLE_EVENT = Event("INFO", "LEVEL")
 
     def setUp(self):
-        self.logdb = logdb.DiaryDB(self.FIXED_DB_PATH)
+        self.logdb = DiaryDB(self.FIXED_DB_PATH)
 
     def constructs_correctly(self):
         self.assertIsInstance(self.logdb.conn, sqlite3.Connection)

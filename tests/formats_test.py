@@ -1,4 +1,4 @@
-from diary import events, formats
+from diary import Event, formats
 import datetime as dt
 import unittest
 
@@ -7,7 +7,7 @@ class TestFormat(unittest.TestCase):
     INFO = "event is logged"
     LEVEL = "CRITICAL"
     TIMESTAMP = dt.datetime(1901, 2, 3, 4, 5, 6)
-    SIMPLE_EVENT = events.Event(INFO, LEVEL, TIMESTAMP)
+    SIMPLE_EVENT = Event(INFO, LEVEL, TIMESTAMP)
 
     def setUp(self):
         pass
@@ -27,7 +27,7 @@ class TestFormat(unittest.TestCase):
         self.assertEquals(output,
                           " - CRITICAL - 1901-02-03 04:05:06 - event is logged - ")
 
-        output = formats.alarms(events.Event(
+        output = formats.alarms(Event(
             self.INFO, 'ERROR', self.TIMESTAMP))
         self.assertEquals(output,
                           "!!!ERROR!!!1901-02-03 04:05:06!!!event is logged!!!")
