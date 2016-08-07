@@ -28,7 +28,7 @@ def standard(event):
     )
 
 
-def min(event):
+def minimal(event):
     """A straight to the point format
     ex: INFO: 07/30/16 20:15:48: example text
     """

@@ -21,7 +21,7 @@ if __name__ == '__main__':
     easy_load(events_test.TestEvent)
     easy_load(formats_test.TestFormat)
     easy_load(levels_test.TestLevel)
-    easy_load(logdb_test.TestLoggerDB)
+    easy_load(logdb_test.TestDiaryDB)
 
     # Run tests
     results = unittest.TestResult()

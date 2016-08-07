@@ -2,18 +2,18 @@ import sqlite3
 from types import FunctionType
 
 
-class LoggerDB():
+class DiaryDB():
     """
-    LoggerDB is meant to be an easy way to log events into a database.
-    LoggerDB should be inherited from and create_table and log should
+    DiaryDB is meant to be an easy way to log events into a database.
+    DiaryDB should be inherited from and create_table and log should
     be overridden in such a way to store an event in the database.
-    LoggerDB.log must take a first argument that is an event with information
+    DiaryDB.log must take a first argument that is an event with information
     to log.
     """
 
     def __init__(self, path):
         """
-        Create the connection with the databse and attempt to make a table.
+        Create the connection with the database and attempt to make a table.
         :param path: relative path of database
         """
         self.conn = sqlite3.connect(path, detect_types=sqlite3.PARSE_DECLTYPES)
@@ -22,7 +22,7 @@ class LoggerDB():
 
     def create_table(self):
         """
-        Create a table to accomodate an event class. Attempts to create
+        Create a table to accommodate an event class. Attempts to create
         the table but if the table already exists the program continues.
         """
         self.cursor.execute('''

@@ -9,7 +9,7 @@ class Event():
         class and add what parameters they see fit to the constructor.
         Note: Using a custom event will likely require a custom LoggerDB and
         formatter to get the most out of the most event. Appropriate
-        inheritence of LoggerDB, Event, and a custom format makes Diary very
+        inheritance of DiaryDB, Event, and a custom format makes Diary very
         configurable.
 
         :param info: information relevant to the log
