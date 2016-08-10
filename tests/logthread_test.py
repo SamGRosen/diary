@@ -7,12 +7,17 @@ import os
 class TestDiaryThread(unittest.TestCase):
     INFO = "event was logged"
     TEMP_DB = "db_test.db"
+    TEMP_FILE = "thread_test.txt"
     TRIALS = 3
     count = 0
 
     def setUp(self):
-        self.log = Diary("testing_dir", file_name="thread_test.txt",
+        self.log = Diary("testing_dir", file_name=self.TEMP_FILE,
                          db_name=self.TEMP_DB, async=True)
+
+    def tearDown(self):
+        self.log.close()
+        os.remove(os.path.join("testing_dir", self.TEMP_FILE))
 
     @classmethod
     def tearDownClass(cls):
@@ -21,7 +26,7 @@ class TestDiaryThread(unittest.TestCase):
     def test_timer(self):
         def log_counter():
             self.count += 1
-            self.log.log("event " + str(self.count))
+            self.log.log(self.INFO + str(self.count))
 
         self.log.set_timer(1, log_counter)
 
@@ -30,7 +35,12 @@ class TestDiaryThread(unittest.TestCase):
         self.log.close()
 
         with DiaryDB(self.log.db_file.name) as db:
-            db.assert_event_logged("event " + str(self.count))
+            db.assert_event_logged(self.INFO + str(self.count))
+
+        with open(self.log.log_file.name) as f:
+            for i in range(1, self.TRIALS + 1):
+                self.assertTrue(self.INFO + str(i) in f.readline())
+
 
     def test_timer_with_args(self):
         def log_arg(arg):
@@ -51,6 +61,9 @@ class TestDiaryThread(unittest.TestCase):
 
             for i in range(self.TRIALS):
                 self.assertTrue(entries.fetchone())
+
+        with open(self.log.log_file.name) as f:
+            self.assertTrue(self.INFO in f.readline())
 
     def test_timer_with_kwargs(self):
         repeats = 10
@@ -73,6 +86,9 @@ class TestDiaryThread(unittest.TestCase):
             for i in range(self.TRIALS):
                 self.assertTrue(entries.fetchone())
 
+        with open(self.log.log_file.name) as f:
+            self.assertTrue(self.INFO * repeats in f.readline())
+
     def test_timer_all_args(self):
         params = (self.INFO, "abc", "def", "123")
         def log_joined(*args):
@@ -93,5 +109,9 @@ class TestDiaryThread(unittest.TestCase):
 
             for i in range(self.TRIALS):
                 self.assertTrue(entries.fetchone())
+
+        with open(self.log.log_file.name) as f:
+            self.assertTrue(' '.join(params) in f.readline())
+
 if __name__ == '__main__':
     unittest.main()
