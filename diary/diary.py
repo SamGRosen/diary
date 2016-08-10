@@ -70,6 +70,7 @@ class Diary(object):
                 self.logdb.close()
             if self.log_file:
                 self.log_file.close()
+            self.timer = None
 
         self.close = cleanup
         self.event = event

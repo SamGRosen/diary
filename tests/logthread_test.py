@@ -23,6 +23,26 @@ class TestDiaryThread(unittest.TestCase):
     def tearDownClass(cls):
         os.remove(os.path.join("testing_dir", cls.TEMP_DB))
 
+    def test_constructor(self):
+        self.assertIsNotNone(self.log.thread)
+        self.assertTrue(self.log.thread.isDaemon())
+        self.assertTrue(self.log.thread.sets_db)
+        self.assertIs(self.log.thread.diary, self.log)
+
+    def test_join(self):
+        returned = self.log.thread.join()
+        self.assertIsNone(returned)
+
+    def test_logs(self):
+        self.log.log(self.INFO)
+        self.log.close()
+
+        with open(self.log.log_file.name) as f:
+            self.assertTrue(self.INFO in f.readline())
+
+        with DiaryDB(self.log.db_file.name) as db:
+            db.assert_event_logged(self.INFO)
+
     def test_timer(self):
         def log_counter():
             self.count += 1
@@ -40,7 +60,6 @@ class TestDiaryThread(unittest.TestCase):
         with open(self.log.log_file.name) as f:
             for i in range(1, self.TRIALS + 1):
                 self.assertTrue(self.INFO + str(i) in f.readline())
-
 
     def test_timer_with_args(self):
         def log_arg(arg):
@@ -67,6 +86,7 @@ class TestDiaryThread(unittest.TestCase):
 
     def test_timer_with_kwargs(self):
         repeats = 10
+
         def log_kwarg(s, repeats=2):
             self.log.log(s * repeats)
 
@@ -91,6 +111,7 @@ class TestDiaryThread(unittest.TestCase):
 
     def test_timer_all_args(self):
         params = (self.INFO, "abc", "def", "123")
+
         def log_joined(*args):
             self.log.log(' '.join(args))
 
@@ -112,6 +133,7 @@ class TestDiaryThread(unittest.TestCase):
 
         with open(self.log.log_file.name) as f:
             self.assertTrue(' '.join(params) in f.readline())
+
 
 if __name__ == '__main__':
     unittest.main()
