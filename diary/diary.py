@@ -63,13 +63,13 @@ class Diary(object):
         @atexit.register
         def cleanup():
             """Called on system exit to ensure logs are saved."""
-            if self.log_file:
-                self.log_file.close()
             if self.db_file:
                 self.db_file.close()
                 if self.async:
                     self.thread.join()
                 self.logdb.close()
+            if self.log_file:
+                self.log_file.close()
 
         self.close = cleanup
         self.event = event
@@ -103,7 +103,7 @@ class Diary(object):
             raise Exception("In order to set a timer async must be enabled")
 
         from RepeatedTimer import RepeatedTimer
-        self.timer = RepeatedTimer(interval, func, *args, **kwargs)
+        self.timer = RepeatedTimer(interval, func, args=args, kwargs=kwargs)
         self.timer.start()
 
     def write(self, event):
@@ -114,7 +114,7 @@ class Diary(object):
         if self.db_file:
             self.logdb.log(event)
         if self.log_file:
-            self.log_file.write(self.format(event))
+            self.log_file.write(self.format(event) + '\n')
         self.last_logged_event = event
 
     def log(self, info, level=levels.info):

@@ -23,6 +23,10 @@ class DiaryThread(Thread):
         self.queue = Queue()
         self.start()
 
+    def join(self, timeout=None):
+        self.queue.put(None)
+        Thread.join(self, timeout)
+
     def add(self, event):
         """Add a logged event to queue for logging"""
         self.queue.put(event)
@@ -32,4 +36,7 @@ class DiaryThread(Thread):
         if self.sets_db:
             self.diary.set_db()
         while True:
-            self.diary.write(self.queue.get())
+            received = self.queue.get()
+            if received is None:
+                return
+            self.diary.write(received)

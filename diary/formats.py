@@ -16,6 +16,8 @@ def stringify_level(l):
     else:
         return str(l)
 
+def stringify_info(info):
+    return str(info).strip()
 
 def standard(event):
     """A simple default format
@@ -24,7 +26,7 @@ def standard(event):
     return "[{name}]:[{time}]: {text}".format(
         name=stringify_level(event.level),
         time=event.dt,
-        text=event.info.strip()
+        text=stringify_info(event.info)
     )
 
 
@@ -35,7 +37,7 @@ def minimal(event):
     return "{name}: {0:%x} {0:%X}: {text}".format(
         event.dt,
         name=stringify_level(event.level),
-        text=event.info.strip()
+        text=stringify_info(event.info)
     )
 
 
@@ -47,7 +49,7 @@ def alarms(event):
     return "{sep}{name}{sep}{dt}{sep}{text}{sep}".format(
         sep=seperators,
         name=stringify_level(event.level),
-        text=event.info.strip(),
+        text=stringify_info(event.info),
         dt=event.dt
     )
 
@@ -59,5 +61,5 @@ def easy_read(event):
     return "|{name}| On {0:%x} @ {0:%I:%M.%S%p} | {text}".format(
         event.dt,
         name=stringify_level(event.level),
-        text=event.info.strip()
+        text=stringify_info(event.info)
     )

@@ -10,6 +10,7 @@ import events_test
 import formats_test
 import levels_test
 import logdb_test
+import logthread_test
 
 if __name__ == '__main__':
     # Setup test objects
@@ -24,6 +25,7 @@ if __name__ == '__main__':
     easy_load(formats_test.TestFormat)
     easy_load(levels_test.TestLevel)
     easy_load(logdb_test.TestDiaryDB)
+    easy_load(logthread_test.TestDiaryThread)
 
     # Run tests
     results = unittest.TestResult()
