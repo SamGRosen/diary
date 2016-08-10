@@ -74,6 +74,24 @@ class TestDiaryThread(unittest.TestCase):
                 self.assertTrue(entries.fetchone())
 
     def test_timer_all_args(self):
-        pass
+        params = (self.INFO, "abc", "def", "123")
+        def log_joined(*args):
+            self.log.log(' '.join(args))
+
+        self.log.set_timer(1, log_joined, *params)
+
+        time.sleep(self.TRIALS + .1)
+
+        self.log.close()
+
+        with DiaryDB(self.log.db_file.name) as db:
+            entries = db.cursor.execute(
+                '''SELECT * FROM logs WHERE log=(?)
+                AND level LIKE (?) ORDER BY
+                inputDT ASC LIMIT (?)''',
+                (' '.join(params), '%', self.TRIALS))
+
+            for i in range(self.TRIALS):
+                self.assertTrue(entries.fetchone())
 if __name__ == '__main__':
     unittest.main()
