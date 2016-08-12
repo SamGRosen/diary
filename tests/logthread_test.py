@@ -1,4 +1,4 @@
-from diary import Diary, DiaryDB, DiaryThread
+from diary import Diary, DiaryDB
 import unittest
 import time
 import os

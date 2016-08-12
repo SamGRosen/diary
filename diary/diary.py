@@ -36,8 +36,8 @@ class Diary(object):
         self.db_file = None
         if os.path.exists(path):
             if os.path.isdir(path):
-                self.log_file = open(os.path.join(path, file_name), 'a+')
-                self.db_file = open(os.path.join(path, db_name), 'a+')
+                self.log_file = open(os.path.join(path, file_name), 'a')
+                self.db_file = open(os.path.join(path, db_name), 'a')
             elif os.path.isfile(path):
                 head, tail = os.path.split(path)
                 _, ext = os.path.splitext(tail)
@@ -56,7 +56,14 @@ class Diary(object):
                     path, "Was not found a directory or file"))
         else:
             try:
-                self.log_file = open(path, 'a')
+                _, ext = os.path.splitext(path)
+                if len(ext) > 1:
+                    if ext[1:] in ('db', 'sql', 'sqlite', 'sqlite3'):
+                        self.db_file = open(path, 'a')
+                    else:
+                        self.log_file = open(path, 'a')
+                else:
+                    self.log_file = open(path, 'a')
             except Exception as e:
                 raise e
 

@@ -19,6 +19,7 @@ def create_dir(path):
 class TestDiary(unittest.TestCase):
     INFO = "event was logged"
     DB_PATH = os.path.join('testing_dir', 'perm.db')
+    NEW_DB_PATH = os.path.join('testing_dir', 'temp.db')
     TXT_PATH = os.path.join('testing_dir', 'log.txt')
     INIT_DIR = os.path.join('testing_dir', 'dir_for_init')
     BAD_PATH = os.path.join('testing_dir', 'BAD.FILE')
@@ -39,6 +40,7 @@ class TestDiary(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         os.remove(cls.NO_EXIST_PATH)
+        os.remove(cls.NEW_DB_PATH)
         shutil.rmtree(cls.INIT_DIR)
 
     def test_init_dir(self):
@@ -68,7 +70,14 @@ class TestDiary(unittest.TestCase):
         log.info(self.INFO)
         log.close()
         with DiaryDB(self.DB_PATH) as db:
-            db.assert_event_logged(self.INFO, level="INFO")
+            db.assert_event_logged(self.INFO, level="INFO", limit=1)
+
+    def test_init_new_db(self):
+        log = Diary(self.NEW_DB_PATH, async=False)
+        log.info(self.INFO)
+        log.close()
+        with DiaryDB(self.NEW_DB_PATH) as db:
+            db.assert_event_logged(self.INFO, level="INFO", limit=1)
 
     def test_init_bad_ext(self):
         with self.assertRaises(ValueError,
@@ -119,7 +128,7 @@ class TestDiary(unittest.TestCase):
         )
 
         log.log(self.INFO)
-        log.logdb.assert_event_logged(self.INFO, level="INFO")
+        log.logdb.assert_event_logged(self.INFO, level="INFO", limit=1)
         log.close()
 
         self.assertEquals(os.path.split(log.log_file.name)[-1], FILE_NAME)
