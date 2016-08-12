@@ -121,8 +121,13 @@ class Diary(object):
         """
         if self.db_file:
             self.logdb.log(event)
+
         if self.log_file:
-            self.log_file.write(self.format(event) + '\n')
+            if event.formatter is None:
+                self.log_file.write(self.format(event) + '\n')
+            else:
+                self.log_file.write(event.formatted() + '\n')
+
         self.last_logged_event = event
 
     def log(self, info, level=levels.info):

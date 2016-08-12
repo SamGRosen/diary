@@ -1,10 +1,12 @@
 from datetime import datetime
+from types import FunctionType
+from formats import stringify_level
 
 
 class Event():
     """Events are meant to be configurable and easy to create."""
 
-    def __init__(self, info, level, dt=None):
+    def __init__(self, info, level, dt=None, formatter=None):
         """All events should have info, level, and dt. Devs should inherit this
         class and add what parameters they see fit to the constructor.
         Note: Using a custom event will likely require a custom LoggerDB and
@@ -15,7 +17,34 @@ class Event():
         :param info: information relevant to the log
         :param level: a level of classification to the log
         :param dt: time of logging, automatically set on init unless specified
+        :param formatter: str that is mappable to str.format or function that returns
+            a formatted string
+            ex.
+                "[{info}][{level_text}][{dt}]" is equivalent to
+                def simple_format(event):
+                    return "[{info}][{level}][{dt}]".format(
+                        info=event.info,
+                        level_text=event.level_text,
+                        dt=event.dt)
         """
         self.dt = datetime.now() if dt is None else dt
         self.info = info
         self.level = level
+        self.level_text = stringify_level(self.level)
+        self.formatter = formatter
+
+
+
+
+        if self.formatter:
+            if type(formatter) is type(""):
+                self.formatted = lambda : self.formatter.format(**self.__dict__)
+            elif type(formatter) is FunctionType:
+                self.formatted = lambda : self.formatter(self)
+            else:
+                raise ValueError('Could not identify formatter {}'.format(formatter))
+
+    def __str__(self):
+        if hasattr(self, 'formatted'):
+            return self.formatted()
+        return repr(self)
