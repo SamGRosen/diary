@@ -33,7 +33,6 @@ class Event():
         self.level_text = stringify_level(self.level)
         self.set_formatter(formatter)
 
-
     def set_formatter(self, formatter):
         self.formatter = formatter
         if formatter:

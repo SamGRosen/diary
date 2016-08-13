@@ -24,6 +24,8 @@ class TestDiary(unittest.TestCase):
     INIT_DIR = os.path.join('testing_dir', 'dir_for_init')
     BAD_PATH = os.path.join('testing_dir', 'BAD.FILE')
     NO_EXIST_PATH = os.path.join('testing_dir', 'new.txt')
+    ERRORS_LOG_PATH = os.path.join('testing_dir', 'errors.txt')
+    WARNINGS_LOG_PATH = os.path.join('testing_dir', 'warnings.txt')
     MALFORMED_PATH = 'D://^&'
 
     @classmethod
@@ -150,12 +152,36 @@ class TestDiary(unittest.TestCase):
         log.logdb.assert_event_logged(self.INFO, "WARN", 1)
         log.close()
 
+    def test_warn_log_trace(self):
+        log = Diary(self.WARNINGS_LOG_PATH, async=False)
+        log.warn(self.INFO, log_trace=True)
+        log.close()
+        with open(log.log_file.name) as f:
+            self.assertTrue(
+                "logged(event, *args, **kwargs)" in f.read())
+
     def test_error(self):
         DB_NAME = 'levels.db'
         log = Diary(os.path.join(self.INIT_DIR), async=False, db_name=DB_NAME)
-        log.error(self.INFO)
+        log.error(self.INFO, log_trace=False)
         log.logdb.assert_event_logged(self.INFO, "ERROR", 1)
         log.close()
+
+    def test_error_raises(self):
+        log = Diary(self.ERRORS_LOG_PATH)
+        with self.assertRaises(Exception, msg="ERROR"):
+            log.error("ERROR", raises=True)
+
+    def test_error_raises_specific(self):
+        log = Diary(self.ERRORS_LOG_PATH)
+        with self.assertRaises(AssertionError, msg="ERROR"):
+            log.error("ERROR", raises=True, e_type=AssertionError)
+
+    def test_error_log_trace(self):
+        log = Diary(self.ERRORS_LOG_PATH)
+        log.error("ERROR", log_trace=True)
+        with open(log.log_file.name) as f:
+            self.assertTrue("logged(event, *args, **kwargs)" in f.read())
 
     def test_debug(self):
         DB_NAME = 'levels.db'

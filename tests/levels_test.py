@@ -8,10 +8,10 @@ def reporter(event):
     global report_count
     report_count += 1
 
-
 @level
 def mock_level(event, repeats, double_repeats=False):
-    return event * repeats * (1 + int(double_repeats))
+    global result
+    result = event * repeats * (1 + int(double_repeats))
 
 
 class TestLevel(unittest.TestCase):
@@ -22,29 +22,29 @@ class TestLevel(unittest.TestCase):
         self.report_count = report_count
 
     def test_reporter(self):
-        output = mock_level(self.INFO, reporter, 1)
+        mock_level(self.INFO, reporter, 1)
 
         self.assertEquals(self.report_count + 1, report_count)
 
     def test_level_return(self):
-        output = mock_level(self.INFO, reporter, 1)
+        mock_level(self.INFO, reporter, 1)
 
-        self.assertEquals(output, self.INFO)
+        self.assertEquals(result, self.INFO)
 
     def test_level_args(self):
-        output = mock_level(self.INFO, reporter, 2)
+        mock_level(self.INFO, reporter, 2)
 
-        self.assertEquals(output, "!!")
+        self.assertEquals(result, "!!")
 
     def test_level_kwargs(self):
-        output = mock_level(self.INFO, reporter, 1, True)
+        mock_level(self.INFO, reporter, 1, True)
 
-        self.assertEquals(output, "!!")
+        self.assertEquals(result, "!!")
 
     def test_level_both_args(self):
-        output = mock_level(self.INFO, reporter, 2, True)
+        mock_level(self.INFO, reporter, 2, True)
 
-        self.assertEquals(output, "!!!!")
+        self.assertEquals(result, "!!!!")
 
     def test_placeholder_levels(self):
         levels.debug(self.INFO, reporter)
@@ -61,7 +61,7 @@ class TestLevel(unittest.TestCase):
 
     def test_error_level_specific(self):
         with self.assertRaises(ValueError, msg=self.INFO):
-            levels.error(self.INFO, reporter, raises=True, e_type=ValueError)
+            levels.error(self.INFO, reporter, raises=True, e_type=ValueError, log_trace=False)
 
         self.assertEquals(self.report_count + 1, report_count)
 

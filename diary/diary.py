@@ -130,7 +130,7 @@ class Diary(object):
 
         self.last_logged_event = event
 
-    def log(self, info, level=levels.info):
+    def log(self, info, level=levels.info, **kwargs):
         """Log info to its relevant level (see levels.py)
 
         :param info: info for logging
@@ -138,36 +138,36 @@ class Diary(object):
         """
         event_to_log = self.event(info, level)
         if self.async:
-            level(event_to_log, self.thread.add)
+            level(event_to_log, self.thread.add, **kwargs)
         else:
-            level(event_to_log, self.write)
+            level(event_to_log, self.write, **kwargs)
 
-    def info(self, info):
+    def info(self, info, **kwargs):
         """Log general info
 
         :param info: info relevant to application processes
         """
         self.log(info, level=levels.info)
 
-    def warn(self, info):
+    def warn(self, info, **kwargs):
         """Log info that requires a warning
 
         :param info: info relevant to a warning
         """
-        self.log(info, level=levels.warn)
+        self.log(info, level=levels.warn, **kwargs)
 
-    def error(self, info):
+    def error(self, info, **kwargs):
         """Log info that may cause an error
 
         :param info: info relevant to an error
         """
-        self.log(info, level=levels.error)
+        self.log(info, level=levels.error, **kwargs)
 
-    def debug(self, info):
+    def debug(self, info, **kwargs):
         """Log info that may only be helpful to the developer
         Will only log if debugging is enabled
 
         :param info: info for the devs
         """
         if self.debug_enabled:
-            self.log(info, level=levels.debug)
+            self.log(info, level=levels.debug, **kwargs)

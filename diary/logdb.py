@@ -16,6 +16,7 @@ class DiaryDB():
         Create the connection with the database and attempt to make a table.
         :param path: relative path of database
         """
+        self.path = path
         self.conn = sqlite3.connect(path, detect_types=sqlite3.PARSE_DECLTYPES)
         self.cursor = self.conn.cursor()
         self.create_table()

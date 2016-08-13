@@ -7,7 +7,7 @@ def example_level(event):
 """
 
 from functools import wraps
-
+import traceback
 
 def level(logged):
     """
@@ -16,8 +16,13 @@ def level(logged):
     """
     @wraps(logged)
     def level_wrapper(event, reporter, *args, **kwargs):
-        reporter(event)
-        return logged(event, *args, **kwargs)
+        try:
+            logged(event, *args, **kwargs)
+            reporter(event)
+
+        except Exception as e:
+            reporter(event)
+            raise e
 
     return level_wrapper
 
@@ -32,24 +37,46 @@ def info(event):
 
 
 @level
-def warn(event):
+def warn(event, log_trace=False):
     """A level of logging for info that may have side effects.
 
     :param event: event instance
+    :param log_trace: boolean of whether or not to log current trace
     """
-    pass
+    if log_trace:
+        event.info += ''.join(traceback.format_stack()[:-1])
 
 
 @level
-def error(event, raises=False, e_type=Exception):
+def error(event, raises=False, e_type=Exception, log_trace=True, limit=None):
     """A level of information that may have caused an error.
 
     :param event: error event instance
     :param raises: boolean of whether or not an error should be raised
     :param e_type: exception type to be raised
+    :param log_trace: boolean of whether or not log traceback
+    :param limit: integer of traceback limit
     """
     if raises:
-        raise e_type(event)
+        if hasattr(event, "info"):
+            logged_exception = e_type(event.info)
+        else:
+            logged_exception = e_type(event)
+
+        if log_trace:
+            try:
+                raise logged_exception
+            except Exception as err:
+                given_traceback = traceback.format_stack(limit=limit)[:-1]
+                given_traceback.append(traceback.format_exc(limit=limit))
+                event.info += '\n' + ''.join(given_traceback)
+            finally:
+                raise logged_exception
+        else:
+            raise logged_exception
+
+    elif log_trace:
+        event.info += ''.join(traceback.format_stack())
 
 
 @level
