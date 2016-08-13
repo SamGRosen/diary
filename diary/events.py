@@ -31,16 +31,16 @@ class Event():
         self.info = info
         self.level = level
         self.level_text = stringify_level(self.level)
+        self.set_formatter(formatter)
+
+
+    def set_formatter(self, formatter):
         self.formatter = formatter
-
-
-
-
-        if self.formatter:
+        if formatter:
             if type(formatter) is type(""):
-                self.formatted = lambda : self.formatter.format(**self.__dict__)
+                self.formatted = lambda: self.formatter.format(**self.__dict__)
             elif type(formatter) is FunctionType:
-                self.formatted = lambda : self.formatter(self)
+                self.formatted = lambda: self.formatter(self)
             else:
                 raise ValueError('Could not identify formatter {}'.format(formatter))
 

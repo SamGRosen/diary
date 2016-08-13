@@ -72,6 +72,17 @@ class TestEvent(unittest.TestCase):
             msg="Could not identify formatter {}".format(formatter)):
             event = Event(self.INFO, self.LEVEL, formatter=formatter)
 
+    def test_set_formatter(self):
+        event = Event(self.INFO, self.LEVEL)
+        self.assertIsNone(event.formatter)
+        with self.assertRaises(AttributeError,
+            msg="Event instance has no attribute 'formatted'"):
+            event.formatted()
+
+        event.set_formatter("({level})({info})")
+        self.assertEquals(event.formatted(), "({level})({info})".format(
+            level=event.level, info=event.info))
+
     def test_no_formatter(self):
         self.assertIsNone(self.basicEvent.formatter)
 
