@@ -18,11 +18,12 @@ def level(logged):
     def level_wrapper(event, reporter, *args, **kwargs):
         try:
             logged(event, *args, **kwargs)
-            reporter(event)
-
         except Exception as e:
             reporter(event)
             raise e
+        else:
+            reporter(event)
+
 
     return level_wrapper
 
