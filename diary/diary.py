@@ -136,7 +136,10 @@ class Diary(object):
         :param info: info for logging
         :param level: @level decorated function handle relevant behavior
         """
-        event_to_log = self.event(info, level)
+        if isinstance(info, events.Event):
+            event_to_log = info
+        else:
+            event_to_log = self.event(info, level)
         if self.async:
             level(event_to_log, self.thread.add, **kwargs)
         else:

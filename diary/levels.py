@@ -9,7 +9,7 @@ def example_level(event):
 from functools import wraps
 import traceback
 
-def level(logged):
+def log_level(logged):
     """
     Decorator to automatically log an event based on level.
     Decorated functions handle appropriate behavior.
@@ -28,7 +28,7 @@ def level(logged):
     return level_wrapper
 
 
-@level
+@log_level
 def info(event):
     """The most generic level of logging. No special behavior needed.
 
@@ -37,7 +37,7 @@ def info(event):
     pass
 
 
-@level
+@log_level
 def warn(event, log_trace=False):
     """A level of logging for info that may have side effects.
 
@@ -48,7 +48,7 @@ def warn(event, log_trace=False):
         event.info += ''.join(traceback.format_stack()[:-1])
 
 
-@level
+@log_level
 def error(event, raises=False, e_type=Exception, log_trace=True, limit=None):
     """A level of information that may have caused an error.
 
@@ -80,7 +80,7 @@ def error(event, raises=False, e_type=Exception, log_trace=True, limit=None):
         event.info += ''.join(traceback.format_stack())
 
 
-@level
+@log_level
 def debug(event):
     """A level of info pertinent to developers but not to users.
 

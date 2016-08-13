@@ -38,15 +38,11 @@ class DiaryDB():
 
         :param event: event object to commit to db
         """
-        if type(event.level) is FunctionType:
-            level_text = event.level.__name__.upper()
-        else:
-            level_text = str(event.level)
         with self.conn:
             self.cursor.execute('''
                                 INSERT INTO logs(inputDT, level, log)
                                                  VALUES(?, ?, ?)''',
-                                (event.dt, level_text, event.info))
+                                (event.dt, event.level_text, event.info))
 
     def assert_event_logged(self, log, level='%', limit=-1):
         """Testing method to ensure an event is logged
