@@ -24,8 +24,10 @@ class DiaryThread(Thread):
         self.start()
 
     def join(self, timeout=None):
+        self.queue.task_done()
         self.queue.put(None)
         Thread.join(self, timeout)
+
 
     def add(self, event):
         """Add a logged event to queue for logging"""

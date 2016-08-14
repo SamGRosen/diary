@@ -1,4 +1,4 @@
-from diary import level, levels
+from diary import log_level, levels
 import unittest
 
 report_count = 0
@@ -8,7 +8,7 @@ def reporter(event):
     global report_count
     report_count += 1
 
-@level
+@log_level
 def mock_level(event, repeats, double_repeats=False):
     global result
     result = event * repeats * (1 + int(double_repeats))
