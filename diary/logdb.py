@@ -1,5 +1,4 @@
 import sqlite3
-from types import FunctionType
 
 
 class DiaryDB():

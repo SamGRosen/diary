@@ -5,3 +5,4 @@ output
 .pypirc
 /dist/
 tests/testing_dir/
+*.coverage

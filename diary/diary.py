@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 import atexit
 import os.path
 
-import logdb
-import levels
-import formats
-import events
+from diary import logdb
+from diary import levels
+from diary import formats
+from diary import events
 
 
 class Diary(object):
@@ -91,7 +92,7 @@ class Diary(object):
 
         sets_db = self.db_file is not None
         if async:
-            from logthread import DiaryThread
+            from diary.logthread import DiaryThread
             self.thread = DiaryThread(self, sets_db=sets_db)
         elif sets_db:
             self.set_db()
@@ -110,7 +111,7 @@ class Diary(object):
         if self.async is False:
             raise Exception("In order to set a timer async must be enabled")
 
-        from RepeatedTimer import RepeatedTimer
+        from diary.RepeatedTimer import RepeatedTimer
         self.timer = RepeatedTimer(interval, func, args=args, kwargs=kwargs)
         self.timer.start()
 

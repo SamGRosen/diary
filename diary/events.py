@@ -1,6 +1,8 @@
+from __future__ import absolute_import
+
 from datetime import datetime
 from types import FunctionType
-from formats import stringify_level
+from diary.formats import stringify_level
 
 
 class Event():
