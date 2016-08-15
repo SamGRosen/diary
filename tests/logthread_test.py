@@ -43,6 +43,12 @@ class TestDiaryThread(unittest.TestCase):
         with DiaryDB(self.log.db_file.name) as db:
             db.assert_event_logged(self.INFO)
 
+    def test_timer_no_async(self):
+        log = Diary("testing_dir", async=False)
+        with self.assertRaises(RuntimeError,
+            msg="In order to set a timer async must be enabled"):
+            log.set_timer(100, lambda: None)
+
     def test_timer(self):
         def log_counter():
             self.count += 1

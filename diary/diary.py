@@ -109,7 +109,7 @@ class Diary(object):
     def set_timer(self, interval, func, *args, **kwargs):
         """Set a timer to log an event at every interval"""
         if self.async is False:
-            raise Exception("In order to set a timer async must be enabled")
+            raise RuntimeError("In order to set a timer async must be enabled")
 
         from diary.RepeatedTimer import RepeatedTimer
         self.timer = RepeatedTimer(interval, func, args=args, kwargs=kwargs)

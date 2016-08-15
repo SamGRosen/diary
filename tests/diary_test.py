@@ -238,6 +238,15 @@ class TestDiary(unittest.TestCase):
         with DiaryDB(log.db_file.name) as db:
             db.assert_event_logged(self.INFO, level=mock_level)
 
+    def test_log_event_formatted(self):
+        log = Diary(self.INIT_DIR, file_name="formatted.log", async=False)
+        e = Event(self.INFO, "LEVEL", formatter="{info}|{level}")
+        log.log(e)
+        log.close()
+
+        with open(log.log_file.name) as f:
+            self.assertEquals("{info}|{level}\n".format(info=self.INFO, level="LEVEL"), f.readline())
+
     def test_queue_join(self):
         trials = 10
         log = Diary(self.INIT_DIR, async=True, db_name="QUEUE_TEST.db")
