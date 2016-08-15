@@ -1,7 +1,7 @@
 import sqlite3
 
 
-class DiaryDB():
+class DiaryDB(object):
     """
     DiaryDB is meant to be an easy way to log events into a database.
     DiaryDB should be inherited from and create_table and log should

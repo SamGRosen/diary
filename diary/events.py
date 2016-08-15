@@ -5,7 +5,7 @@ from types import FunctionType
 from diary.formats import stringify_level
 
 
-class Event():
+class Event(object):
     """Events are meant to be configurable and easy to create."""
 
     def __init__(self, info, level, dt=None, formatter=None):
