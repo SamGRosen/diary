@@ -38,7 +38,7 @@ class Event(object):
     def set_formatter(self, formatter):
         self.formatter = formatter
         if formatter:
-            if type(formatter) is type(""):
+            if isinstance(formatter, str):
                 self.formatted = lambda: self.formatter.format(**self.__dict__)
             elif type(formatter) is FunctionType:
                 self.formatted = lambda: self.formatter(self)
