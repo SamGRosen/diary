@@ -185,10 +185,22 @@ class TestDiary(unittest.TestCase):
 
     def test_debug(self):
         DB_NAME = 'levels.db'
-        log = Diary(os.path.join(self.INIT_DIR), async=False, db_name=DB_NAME)
+        log = Diary(self.INIT_DIR, async=False, db_name=DB_NAME)
         log.debug(self.INFO)
         log.logdb.assert_event_logged(self.INFO, "DEBUG", 1)
         log.close()
+
+    def test_queue_join(self):
+        trials = 10
+        log = Diary(self.INIT_DIR, async=True, db_name="QUEUE_TEST.db")
+        for i in range(trials):
+            log.log(i)
+
+        log.close()
+        self.assertFalse(log.thread.is_alive())
+        with DiaryDB(log.db_file.name) as db:
+            entries = db.cursor.execute("SELECT * FROM logs")
+            self.assertEquals(len(entries.fetchall()), trials)
 
 
 if __name__ == '__main__':

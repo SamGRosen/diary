@@ -42,7 +42,7 @@ class DiaryDB():
             self.cursor.execute('''
                                 INSERT INTO logs(inputDT, level, log)
                                                  VALUES(?, ?, ?)''',
-                                (event.dt, event.level_text, event.info))
+                                (event.dt, event.level_str, event.info))
 
     def assert_event_logged(self, log, level='%', limit=-1):
         """Testing method to ensure an event is logged

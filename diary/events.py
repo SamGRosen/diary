@@ -21,16 +21,16 @@ class Event():
             a formatted string
             ex.
                 "[{info}][{level_text}][{dt}]" is equivalent to
-                def simple_format(event):
+                def formatted(self):
                     return "[{info}][{level}][{dt}]".format(
-                        info=event.info,
-                        level_text=event.level_text,
-                        dt=event.dt)
+                        info=self.info,
+                        level=self.level_text,
+                        dt=self.dt)
         """
         self.dt = datetime.now() if dt is None else dt
         self.info = info
         self.level = level
-        self.level_text = stringify_level(self.level)
+        self.level_str = stringify_level(self.level)
         self.set_formatter(formatter)
 
     def set_formatter(self, formatter):
@@ -42,6 +42,10 @@ class Event():
                 self.formatted = lambda: self.formatter(self)
             else:
                 raise ValueError('Could not identify formatter {}'.format(formatter))
+
+    def set_level(self, level):
+        self.level = level
+        self.level_str = stringify_level(self.level)
 
     def __str__(self):
         if hasattr(self, 'formatted'):

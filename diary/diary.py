@@ -150,13 +150,19 @@ class Diary(object):
 
         :param info: info relevant to application processes
         """
-        self.log(info, level=levels.info)
+        if isinstance(info, events.Event):
+            info.set_level(levels.info)
+
+        self.log(info, level=levels.info, **kwargs)
 
     def warn(self, info, **kwargs):
         """Log info that requires a warning
 
         :param info: info relevant to a warning
         """
+        if isinstance(info, events.Event):
+            info.set_level(levels.warn)
+
         self.log(info, level=levels.warn, **kwargs)
 
     def error(self, info, **kwargs):
@@ -164,6 +170,9 @@ class Diary(object):
 
         :param info: info relevant to an error
         """
+        if isinstance(info, events.Event):
+            info.set_level(levels.error)
+
         self.log(info, level=levels.error, **kwargs)
 
     def debug(self, info, **kwargs):
@@ -172,5 +181,8 @@ class Diary(object):
 
         :param info: info for the devs
         """
+        if isinstance(info, events.Event):
+            info.set_level(levels.debug)
+
         if self.debug_enabled:
             self.log(info, level=levels.debug, **kwargs)

@@ -24,7 +24,10 @@ class DiaryThread(Thread):
         self.start()
 
     def join(self, timeout=None):
-        self.queue.task_done()
+        try:
+            self.queue.task_done()
+        except ValueError as e:
+            pass # Nothing waiting in queue, how nice!
         self.queue.put(None)
         Thread.join(self, timeout)
 
