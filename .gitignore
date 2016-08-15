@@ -6,3 +6,4 @@ output
 /dist/
 tests/testing_dir/
 *.coverage
+coverage.xml

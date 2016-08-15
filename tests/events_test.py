@@ -92,5 +92,18 @@ class TestEvent(unittest.TestCase):
 
         self.assertEquals(str(self.basicEvent), repr(self.basicEvent))
 
+    def test_set_level(self):
+        mock_level = lambda: None
+        event_to_change = Event(self.INFO, mock_level)
+        self.assertIs(event_to_change.level, mock_level)
+        self.assertEquals(event_to_change.level_str, mock_level.__name__.upper())
+
+        new_level = lambda: None
+        event_to_change.set_level(new_level)
+        self.assertIs(event_to_change.level, new_level)
+        self.assertEquals(event_to_change.level_str, new_level.__name__.upper())
+
+
+
 if __name__ == '__main__':
     unittest.main()

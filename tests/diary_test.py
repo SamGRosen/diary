@@ -1,4 +1,4 @@
-from diary import Diary, DiaryDB, Event
+from diary import Diary, DiaryDB, Event, levels
 import unittest
 import shutil
 import os
@@ -26,6 +26,7 @@ class TestDiary(unittest.TestCase):
     NO_EXIST_PATH = os.path.join('testing_dir', 'new.txt')
     ERRORS_LOG_PATH = os.path.join('testing_dir', 'errors.txt')
     WARNINGS_LOG_PATH = os.path.join('testing_dir', 'warnings.txt')
+    NO_EXT_PATH = os.path.join('testing_dir', 'no_ext')
     MALFORMED_PATH = 'D://^&'
 
     @classmethod
@@ -37,6 +38,8 @@ class TestDiary(unittest.TestCase):
             pass  # Create a text file
         with open(cls.BAD_PATH, 'w'):
             pass # Create a bad file
+        with open(cls.NO_EXT_PATH, 'w'):
+            pass # Create file with no ext
         create_dir(cls.INIT_DIR)
 
     @classmethod
@@ -66,6 +69,13 @@ class TestDiary(unittest.TestCase):
         with open(self.TXT_PATH) as f:
             line = f.readline()
             self.assertTrue(self.INFO in line)
+
+    def test_init_no_ext(self):
+        log = Diary(self.NO_EXT_PATH, async=False)
+        log.info(self.INFO)
+        log.close()
+        with open(self.NO_EXT_PATH) as f:
+            self.assertTrue(self.INFO in f.readline())
 
     def test_init_db(self):
         log = Diary(self.DB_PATH, async=False)
@@ -189,6 +199,44 @@ class TestDiary(unittest.TestCase):
         log.debug(self.INFO)
         log.logdb.assert_event_logged(self.INFO, "DEBUG", 1)
         log.close()
+
+    def test_set_db_exc(self):
+        log = Diary(self.TXT_PATH)
+        self.assertIsNone(log.db_file)
+        with self.assertRaises(ValueError,
+            msg="Cannot set a database without a database file"):
+            log.set_db()
+
+    def test_levels_setting_levels(self):
+        log = Diary(self.INIT_DIR, db_name="levels.db", async=False)
+        e = Event(self.INFO, level="")
+        log.info(e)
+        self.assertIs(e.level, levels.info)
+        log.warn(e)
+        self.assertIs(e.level, levels.warn)
+        log.error(e)
+        self.assertIs(e.level, levels.error)
+        log.debug(e)
+        self.assertIs(e.level, levels.debug)
+
+        log.close()
+
+        with DiaryDB(log.db_file.name) as db:
+            db.assert_event_logged(self.INFO, level="INFO", limit=4)
+            db.assert_event_logged(self.INFO, level="WARN", limit=4)
+            db.assert_event_logged(self.INFO, level="ERROR", limit=4)
+            db.assert_event_logged(self.INFO, level="DEBUG", limit=4)
+
+    def test_log_event_instance(self):
+        mock_level = "CRITICAL"
+        log = Diary(self.INIT_DIR, db_name="events.db", async=False)
+        e = Event(self.INFO, level=mock_level)
+        log.log(e)
+        self.assertEquals(e.level, mock_level)
+
+        log.close()
+        with DiaryDB(log.db_file.name) as db:
+            db.assert_event_logged(self.INFO, level=mock_level)
 
     def test_queue_join(self):
         trials = 10

@@ -5,12 +5,17 @@ import os.path
 
 
 class TestDiaryDB(unittest.TestCase):
-    FIXED_DB_PATH = os.path.join(os.path.dirname(__file__),
-                                 'testing_dir', 'perm.db')
+    TEMP_DB_PATH = os.path.join(os.path.dirname(__file__),
+                                 'testing_dir', 'temp.db')
     SIMPLE_EVENT = Event("INFO", "LEVEL")
 
     def setUp(self):
-        self.logdb = DiaryDB(self.FIXED_DB_PATH)
+        self.logdb = DiaryDB(self.TEMP_DB_PATH)
+
+    @classmethod
+    def tearDownClass(cls):
+        import os
+        os.remove(cls.TEMP_DB_PATH)
 
     def constructs_correctly(self):
         self.assertIsInstance(self.logdb.conn, sqlite3.Connection)
