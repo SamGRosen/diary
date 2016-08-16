@@ -95,8 +95,12 @@ class TestEvent(unittest.TestCase):
         self.assertIsNone(event.formatter)
 
     def test_no_formatter(self):
-        self.assertIsNone(self.basicEvent.formatter)
+        class NoFormattedEvent(Event):
+            pass
 
+        event = NoFormattedEvent(self.INFO, self.LEVEL)
+
+        self.assertIsNone(self.basicEvent.formatter)
         with self.assertRaises(AttributeError,
             msg="{} does not have a valid formatter: {}".format(
                 self.basicEvent, self.basicEvent.formatter)
@@ -104,6 +108,21 @@ class TestEvent(unittest.TestCase):
             self.basicEvent.formatted()
 
         self.assertEquals(str(self.basicEvent), repr(self.basicEvent))
+
+    def test_init_set_formatter(self):
+        class ToBeFormattedEvent(Event):
+            pass
+
+        event = ToBeFormattedEvent(self.INFO, self.LEVEL)
+        with self.assertRaises(AttributeError,
+            msg="{} does not have a valid formatter: {}".format(
+                self.basicEvent, self.basicEvent.formatter)
+            ):
+            event.formatted()
+        event.formatter = "{info}"
+        old_formatted = event.formatted
+        self.assertEquals(self.INFO, event.formatted())
+        self.assertIsNot(old_formatted, event.formatted)
 
     def test_set_level(self):
         mock_level = lambda: None

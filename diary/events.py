@@ -49,7 +49,7 @@ class Event(object):
             if isinstance(formatter, str):
                 cls.formatted = lambda self: cls.formatter.format(**self.__dict__)
             elif type(formatter) is FunctionType:
-                cls.formatted = lambda self: cls.formatter(self)
+                cls.formatted = cls.formatter
             else:
                 raise ValueError('Could not identify formatter {}'.format(formatter))
 
