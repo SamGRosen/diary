@@ -240,12 +240,15 @@ class TestDiary(unittest.TestCase):
 
     def test_log_event_formatted(self):
         log = Diary(self.INIT_DIR, file_name="formatted.log", async=False)
-        e = Event(self.INFO, "LEVEL", formatter="{info}|{level}")
+        e = Event(self.INFO, "LEVEL")
+        e.set_formatter("{info}|{level}")
         log.log(e)
         log.close()
 
         with open(log.log_file.name) as f:
             self.assertEquals("{info}|{level}\n".format(info=self.INFO, level="LEVEL"), f.readline())
+
+        e.set_formatter(None) # Set Event formatter back to None to not upset other tests
 
     def test_queue_join(self):
         trials = 10

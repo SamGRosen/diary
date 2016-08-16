@@ -2,13 +2,20 @@ import unittest
 import datetime as dt
 from diary import Event
 
+DEFAULT_FORMATTER = "({level})({info})"
+class FormattedEvent(Event):
+    formatter = DEFAULT_FORMATTER
+
 
 class TestEvent(unittest.TestCase):
     INFO = "something was logged"
     LEVEL = "CRITICAL"
+    DEFAULT_FORMATTER = DEFAULT_FORMATTER
 
     def setUp(self):
         self.basicEvent = Event(self.INFO, self.LEVEL)
+        self.formatted_event = FormattedEvent(self.INFO, self.INFO)
+        FormattedEvent.set_formatter(DEFAULT_FORMATTER)
 
     def test_has_dt(self):
         event = Event(self.INFO, self.LEVEL)
@@ -16,26 +23,26 @@ class TestEvent(unittest.TestCase):
 
     def test_takes_arguments(self):
         given_dt = dt.datetime.now()
-        formatter = ""
-        event = Event(self.INFO, self.LEVEL, given_dt, formatter)
+        event = Event(self.INFO, self.LEVEL, given_dt)
         self.assertEquals(event.dt, given_dt)
         self.assertEquals(event.info, self.INFO)
         self.assertEquals(event.level, self.LEVEL)
-        self.assertEquals(event.formatter, formatter)
+        self.assertEquals(event.formatter, None)
 
     def test_func_formatter(self):
         def quick_format(e):
             return "({level})({text})".format(level = e.level,
                                               text = e.info)
-        event = Event(self.INFO, self.LEVEL, formatter=quick_format)
+
+        FormattedEvent.set_formatter(quick_format)
+
+        event = FormattedEvent(self.INFO, self.LEVEL)
 
         self.assertEquals(event.formatted(), "({level})({text})".format(
             level = event.level, text = event.info))
 
         self.assertEquals(str(event), "({level})({text})".format(
             level=event.level, text=event.info))
-
-        self.assertIs(event.formatter, quick_format)
 
         event.info = ""
 
@@ -46,9 +53,7 @@ class TestEvent(unittest.TestCase):
             level=event.level, text=event.info))
 
     def test_str_formatter(self):
-        formatter = "({level})({info})"
-
-        event = Event(self.INFO, self.LEVEL, formatter=formatter)
+        event = FormattedEvent(self.INFO, self.LEVEL)
 
         self.assertEquals(event.formatted(), "({level})({text})".format(
             level=event.level, text=event.info))
@@ -56,7 +61,7 @@ class TestEvent(unittest.TestCase):
         self.assertEquals(str(event), "({level})({text})".format(
             level=event.level, text=event.info))
 
-        self.assertEquals(event.formatter, formatter)
+        self.assertEquals(event.formatter, DEFAULT_FORMATTER)
 
         event.info = ""
 
@@ -70,10 +75,13 @@ class TestEvent(unittest.TestCase):
         formatter = 5
         with self.assertRaises(ValueError,
             msg="Could not identify formatter {}".format(formatter)):
-            event = Event(self.INFO, self.LEVEL, formatter=formatter)
+            event = FormattedEvent(self.INFO, self.LEVEL)
+            event.set_formatter(formatter)
 
     def test_set_formatter(self):
-        event = Event(self.INFO, self.LEVEL)
+        class MutableFormattedEvent(Event):
+            pass
+        event = MutableFormattedEvent(self.INFO, self.LEVEL)
         self.assertIsNone(event.formatter)
         with self.assertRaises(AttributeError,
             msg="Event instance has no attribute 'formatted'"):
@@ -83,11 +91,16 @@ class TestEvent(unittest.TestCase):
         self.assertEquals(event.formatted(), "({level})({info})".format(
             level=event.level, info=event.info))
 
+        event.set_formatter(None)
+        self.assertIsNone(event.formatter)
+
     def test_no_formatter(self):
         self.assertIsNone(self.basicEvent.formatter)
 
         with self.assertRaises(AttributeError,
-            msg="Event instance has no attribute 'formatted'"):
+            msg="{} does not have a valid formatter: {}".format(
+                self.basicEvent, self.basicEvent.formatter)
+            ):
             self.basicEvent.formatted()
 
         self.assertEquals(str(self.basicEvent), repr(self.basicEvent))

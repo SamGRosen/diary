@@ -1,14 +1,15 @@
 from __future__ import absolute_import
 
+from diary.formats import stringify_level
 from datetime import datetime
 from types import FunctionType
-from diary.formats import stringify_level
 
 
 class Event(object):
+    formatter = None
     """Events are meant to be configurable and easy to create."""
 
-    def __init__(self, info, level, dt=None, formatter=None):
+    def __init__(self, info, level, dt=None):
         """All events should have info, level, and dt. Devs should inherit this
         class and add what parameters they see fit to the constructor.
         Note: Using a custom event will likely require a custom LoggerDB and
@@ -26,22 +27,29 @@ class Event(object):
                 def formatted(self):
                     return "[{info}][{level}][{dt}]".format(
                         info=self.info,
-                        level=self.level_text,
+                        level=self.level_str,
                         dt=self.dt)
         """
         self.dt = datetime.now() if dt is None else dt
         self.info = info
         self.level = level
         self.level_str = stringify_level(self.level)
-        self.set_formatter(formatter)
 
-    def set_formatter(self, formatter):
-        self.formatter = formatter
+    def formatted(self):
+        if self.formatter:
+            self.set_formatter(self.formatter) # Set class formatter discarding this method
+            return self.formatted()
+        else:
+            raise AttributeError("{} does not have a valid formatter: {}".format(self, self.formatter))
+
+    @classmethod
+    def set_formatter(cls, formatter):
+        cls.formatter = formatter
         if formatter:
             if isinstance(formatter, str):
-                self.formatted = lambda: self.formatter.format(**self.__dict__)
+                cls.formatted = lambda self: cls.formatter.format(**self.__dict__)
             elif type(formatter) is FunctionType:
-                self.formatted = lambda: self.formatter(self)
+                cls.formatted = lambda self: cls.formatter(self)
             else:
                 raise ValueError('Could not identify formatter {}'.format(formatter))
 
@@ -50,6 +58,7 @@ class Event(object):
         self.level_str = stringify_level(self.level)
 
     def __str__(self):
-        if hasattr(self, 'formatted'):
+        if self.formatter:
             return self.formatted()
         return repr(self)
+

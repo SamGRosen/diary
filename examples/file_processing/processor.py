@@ -12,6 +12,7 @@ def process_file(f):
 
 class FileProcessEvent(Event):
     RESULT_TO_STR = ("Success", "Unsuccessful", "Error", "Could not process")
+    formatter = "|{dt}|{level_str}|{result_str}|{path} : {info}"
     def __init__(self, info, success, path, level=None):
         Event.__init__(self, info, level)
         self.success = success
@@ -22,7 +23,6 @@ class FileProcessEvent(Event):
         else:
             self.result_str = self.RESULT_TO_STR[-1]
 
-        self.set_formatter("|{dt}|{level_str}|{result_str}|{path} : {info}")
 
 class FileProcessDB(DiaryDB):
     def create_table(self):
