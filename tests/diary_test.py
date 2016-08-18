@@ -250,6 +250,20 @@ class TestDiary(unittest.TestCase):
 
         e.set_formatter(None) # Set Event formatter back to None to not upset other tests
 
+    def test_log_event_in_init(self):
+        class PrettyEvent(Event):
+            formatter = "{info}|{level_str}"
+
+        log = Diary(self.INIT_DIR, file_name="pretty.log", db_name="prettyevents.db", async=False, event=PrettyEvent)
+        log.log(self.INFO)
+        log.close()
+
+        with DiaryDB(log.db_file.name) as db:
+            db.assert_event_logged(self.INFO)
+
+        with open(log.log_file.name) as f:
+            self.assertEquals("{info}|{level}\n".format(info=self.INFO, level="INFO"), f.readline())
+
     def test_queue_join(self):
         trials = 10
         log = Diary(self.INIT_DIR, async=True, db_name="QUEUE_TEST.db")

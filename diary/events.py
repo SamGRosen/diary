@@ -43,7 +43,7 @@ class Event(object):
             raise AttributeError("{} does not have a valid formatter: {}".format(self, self.formatter))
 
     def formatted(self):
-        self._formatted_setup()
+        return self._formatted_setup()
 
     @classmethod
     def set_formatter(cls, formatter):
