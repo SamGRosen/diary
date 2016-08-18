@@ -1,10 +1,11 @@
 # Setup PYTHONPATH
-import sys, os
+import sys, os, shutil
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
 # Import test cases
 import unittest
+import api_test
 import diary_test
 import events_test
 import formats_test
@@ -13,6 +14,12 @@ import logdb_test
 import logthread_test
 
 if __name__ == '__main__':
+    cleanup = True
+    TEST_DIR = os.path.join(os.path.dirname(__file__), 'testing_dir')
+    # Setup temp directory
+    if not os.path.exists(TEST_DIR):
+        os.mkdir(TEST_DIR)
+
     # Setup test objects
     all_tests = unittest.TestSuite()
     loader = unittest.TestLoader()
@@ -20,6 +27,7 @@ if __name__ == '__main__':
         loader.loadTestsFromTestCase(test_case))
 
     # Add tests
+    easy_load(api_test.TestAPI)
     easy_load(diary_test.TestDiary)
     easy_load(events_test.TestEvent)
     easy_load(formats_test.TestFormat)
@@ -38,3 +46,6 @@ if __name__ == '__main__':
             print(''.join(map(str, f)))
     else:
         print("All {} tests pass.".format(results.testsRun))
+
+    if cleanup:
+        shutil.rmtree(TEST_DIR)

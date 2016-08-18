@@ -5,23 +5,25 @@ import os
 
 
 class TestDiaryThread(unittest.TestCase):
+    TEST_DIR_PATH = os.path.join(os.path.dirname(__file__),
+                                 'testing_dir')
     INFO = "event was logged"
-    TEMP_DB = "db_test.db"
-    TEMP_FILE = "thread_test.txt"
+    TEMP_DB = os.path.join(TEST_DIR_PATH, "db_test.db")
+    TEMP_FILE = os.path.join(TEST_DIR_PATH, "thread_test.txt")
     TRIALS = 3
     count = 0
 
     def setUp(self):
-        self.log = Diary("testing_dir", file_name=self.TEMP_FILE,
+        self.log = Diary(self.TEST_DIR_PATH, file_name=self.TEMP_FILE,
                          db_name=self.TEMP_DB, async=True)
 
     def tearDown(self):
         self.log.close()
-        os.remove(os.path.join("testing_dir", self.TEMP_FILE))
+        os.remove(self.TEMP_FILE)
 
     @classmethod
     def tearDownClass(cls):
-        os.remove(os.path.join("testing_dir", cls.TEMP_DB))
+        os.remove(cls.TEMP_DB)
 
     def test_constructor(self):
         self.assertIsNotNone(self.log.thread)
@@ -44,7 +46,7 @@ class TestDiaryThread(unittest.TestCase):
             db.assert_event_logged(self.INFO)
 
     def test_timer_no_async(self):
-        log = Diary("testing_dir", async=False)
+        log = Diary(self.TEST_DIR_PATH, async=False)
         with self.assertRaises(RuntimeError,
             msg="In order to set a timer async must be enabled"):
             log.set_timer(100, lambda: None)

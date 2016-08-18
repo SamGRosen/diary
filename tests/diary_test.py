@@ -17,21 +17,23 @@ def create_dir(path):
 
 
 class TestDiary(unittest.TestCase):
+    TEST_DIR_PATH = os.path.join(os.path.dirname(__file__),
+                                 'testing_dir')
     INFO = "event was logged"
-    DB_PATH = os.path.join('testing_dir', 'perm.db')
-    NEW_DB_PATH = os.path.join('testing_dir', 'temp.db')
-    TXT_PATH = os.path.join('testing_dir', 'log.txt')
-    INIT_DIR = os.path.join('testing_dir', 'dir_for_init')
-    BAD_PATH = os.path.join('testing_dir', 'BAD.FILE')
-    NO_EXIST_PATH = os.path.join('testing_dir', 'new.txt')
-    ERRORS_LOG_PATH = os.path.join('testing_dir', 'errors.txt')
-    WARNINGS_LOG_PATH = os.path.join('testing_dir', 'warnings.txt')
-    NO_EXT_PATH = os.path.join('testing_dir', 'no_ext')
+    DB_PATH = os.path.join(TEST_DIR_PATH, 'perm.db')
+    NEW_DB_PATH = os.path.join(TEST_DIR_PATH, 'temp.db')
+    TXT_PATH = os.path.join(TEST_DIR_PATH, 'log.txt')
+    INIT_DIR = os.path.join(TEST_DIR_PATH, 'dir_for_init')
+    BAD_PATH = os.path.join(TEST_DIR_PATH, 'BAD.FILE')
+    NO_EXIST_PATH = os.path.join(TEST_DIR_PATH, 'new.txt')
+    ERRORS_LOG_PATH = os.path.join(TEST_DIR_PATH, 'errors.txt')
+    WARNINGS_LOG_PATH = os.path.join(TEST_DIR_PATH, 'warnings.txt')
+    NO_EXT_PATH = os.path.join(TEST_DIR_PATH, 'no_ext')
     MALFORMED_PATH = 'D://^&'
 
     @classmethod
     def setUpClass(cls):
-        create_dir('testing_dir')
+        create_dir(cls.TEST_DIR_PATH)
         with open(cls.DB_PATH, 'w'):
             pass  # Create a db file
         with open(cls.TXT_PATH, 'w'):
@@ -41,12 +43,6 @@ class TestDiary(unittest.TestCase):
         with open(cls.NO_EXT_PATH, 'w'):
             pass # Create file with no ext
         create_dir(cls.INIT_DIR)
-
-    @classmethod
-    def tearDownClass(cls):
-        os.remove(cls.NO_EXIST_PATH)
-        os.remove(cls.NEW_DB_PATH)
-        shutil.rmtree(cls.INIT_DIR)
 
     def test_init_dir(self):
         log = Diary(self.INIT_DIR, async=False)
@@ -188,10 +184,11 @@ class TestDiary(unittest.TestCase):
             log.error("ERROR", raises=True, e_type=AssertionError)
 
     def test_error_log_trace(self):
-        log = Diary(self.ERRORS_LOG_PATH)
+        log = Diary(self.ERRORS_LOG_PATH, async=False )
         log.error("ERROR", log_trace=True)
+        log.close()
         with open(log.log_file.name) as f:
-            self.assertTrue("logged(event, *args, **kwargs)" in f.read())
+            self.assertTrue('log.error("ERROR", log_trace=True)' in f.read())
 
     def test_debug(self):
         DB_NAME = 'levels.db'
