@@ -116,6 +116,7 @@ Using a custom database::
     logger = Diary("UserActivity.txt", event=UserEvent, db=UserActivityDB)
     logger.log("Starting app")
     logger.debug(UserEvent("Super user logged in", user_name="super"))
+    logger.log(UserEvent("Hacker logged in", user_name="badguy"), level=critical)
     logger.close()
     with UserActivityDB(logger.db_file.name) as db:
         db.cursor.execute("SELECT * FROM user_activity")
