@@ -3,6 +3,7 @@ import datetime as dt
 from diary import Event
 
 DEFAULT_FORMATTER = "({level})({info})"
+
 class FormattedEvent(Event):
     formatter = DEFAULT_FORMATTER
 
@@ -14,6 +15,7 @@ class TestEvent(unittest.TestCase):
 
     def setUp(self):
         self.basicEvent = Event(self.INFO, self.LEVEL)
+        self.basicEvent.set_formatter(None)
         self.formatted_event = FormattedEvent(self.INFO, self.INFO)
         FormattedEvent.set_formatter(DEFAULT_FORMATTER)
 
@@ -112,14 +114,13 @@ class TestEvent(unittest.TestCase):
     def test_init_set_formatter(self):
         class ToBeFormattedEvent(Event):
             pass
-
         event = ToBeFormattedEvent(self.INFO, self.LEVEL)
         with self.assertRaises(AttributeError,
             msg="{} does not have a valid formatter: {}".format(
                 self.basicEvent, self.basicEvent.formatter)
             ):
             event.formatted()
-        event.set_formatter("{info}")
+        event.formatter = "{info}"
         old_formatted = event.formatted
         self.assertEquals(self.INFO, event.formatted())
         self.assertIsNot(old_formatted, event.formatted)

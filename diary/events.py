@@ -35,19 +35,23 @@ class Event(object):
         self.level = level
         self.level_str = stringify_level(self.level)
 
-    def formatted(self):
+    def _formatted_setup(self):
         if self.formatter:
             self.set_formatter(self.formatter) # Set class formatter discarding this method
             return self.formatted()
         else:
             raise AttributeError("{} does not have a valid formatter: {}".format(self, self.formatter))
 
+    def formatted(self):
+        self._formatted_setup()
+
     @classmethod
     def set_formatter(cls, formatter):
+        cls.formatted = cls._formatted_setup
         cls.formatter = formatter
         if formatter:
             if isinstance(formatter, str):
-                cls.formatted = lambda self: cls.formatter.format(**self.__dict__)
+                cls.formatted = lambda self: formatter.format(**self.__dict__)
             elif type(formatter) is FunctionType:
                 cls.formatted = cls.formatter
             else:
