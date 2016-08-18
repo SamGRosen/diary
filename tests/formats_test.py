@@ -32,7 +32,6 @@ class TestFormat(unittest.TestCase):
         self.assertEquals(output,
                           "!!!ERROR!!!1901-02-03 04:05:06!!!event is logged!!!")
 
-    @unittest.skip("May fail based on location because different date format")
     def test_easy_read(self):
         output = formats.easy_read(self.SIMPLE_EVENT)
         self.assertEquals(output,
