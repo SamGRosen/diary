@@ -18,9 +18,9 @@ class DiaryDB(object):
         self.path = path
         self.conn = sqlite3.connect(path, detect_types=sqlite3.PARSE_DECLTYPES)
         self.cursor = self.conn.cursor()
-        self.create_table()
+        self.create_tables()
 
-    def create_table(self):
+    def create_tables(self):
         """
         Create a table to accommodate an event class. Attempts to create
         the table but if the table already exists the program continues.

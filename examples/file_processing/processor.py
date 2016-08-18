@@ -26,7 +26,7 @@ class FileProcessEvent(Event):
 
 
 class FileProcessDB(DiaryDB):
-    def create_table(self):
+    def create_tables(self):
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS files
             (inputDT TIMESTAMP, level TEXT, info TEXT, path TEXT, success INT)

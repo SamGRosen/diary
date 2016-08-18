@@ -9,7 +9,7 @@ class Event(object):
     formatter = None
     """Events are meant to be configurable and easy to create."""
 
-    def __init__(self, info, level, dt=None):
+    def __init__(self, info, level=None, dt=None):
         """All events should have info, level, and dt. Devs should inherit this
         class and add what parameters they see fit to the constructor.
         Note: Using a custom event will likely require a custom LoggerDB and
@@ -20,15 +20,6 @@ class Event(object):
         :param info: information relevant to the log
         :param level: a level of classification to the log
         :param dt: time of logging, automatically set on init unless specified
-        :param formatter: str that is mappable to str.format or function that returns
-            a formatted string
-            ex.
-                "[{info}][{level_text}][{dt}]" is equivalent to
-                def formatted(self):
-                    return "[{info}][{level}][{dt}]".format(
-                        info=self.info,
-                        level=self.level_str,
-                        dt=self.dt)
         """
         self.dt = datetime.now() if dt is None else dt
         self.info = info
@@ -37,7 +28,7 @@ class Event(object):
 
     def _formatted_setup(self):
         if self.formatter:
-            self.set_formatter(self.formatter) # Set class formatter discarding this method
+            self.set_formatter(self.formatter)  # Set class formatter discarding this method
             return self.formatted()
         else:
             raise AttributeError("{} does not have a valid formatter: {}".format(self, self.formatter))
@@ -65,4 +56,3 @@ class Event(object):
         if self.formatter:
             return self.formatted()
         return repr(self)
-

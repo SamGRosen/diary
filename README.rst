@@ -65,7 +65,6 @@ Defining a custom level::
 
     logger = Diary("EmergencyLogs.log")
     logger.log("URGENT ATTENTION NEEDED", level=critical)
-
     with open(logger.log_file.name) as f:
         print(f.readline()) # !! [CRITICAL]:[2016-08-15 05:12:27.566642]: URGENT ATTENTION NEEDED !!
 
@@ -81,10 +80,45 @@ Defining a custom formatter::
     from diary import Event
 
     class EmergencyEvent(Event):
-        formatter = "|{dt}|{level_Text}|{info}|"
+        formatter = "|{dt}|{level_str}|{info}|"
 
     logger = Diary("EmergencyLogs3.log", event=EmergencyEvent)
     logger.log("There is a catastrophic issue")
+
+Using a custom event::
+
+    class UserEvent(Event):
+        formatter = "[{level_str}]|{dt}|{info}|{user_name}"
+
+        def __init__(self, info, level=None, user_name=""):
+              Event.__init__(self, info, level)
+              self.user_name = ""
+
+    logger = Diary("UserEvents.txt", event=UserEvent)
+    logger.log("Start logging")
+    logger.info(UserEvent("admin logged in", user_name="admin"))  # Directly log events
+    logger.warn(UserEvent("Unknown user logged in", user_name="127.0.0.1"))
+
+Using a custom database::
+
+    from diary import DiaryDB
+    class UserActivityDB(DiaryDB):
+        def create_tables(self):
+             self.cursor.execute('''CREATE TABLE IF NOT EXISTS user_activity
+                                    (inputDT TIMESTAMP, level TEXT, log TEXT, user TEXT)''')
+        def log(self, event):
+            with self.conn:
+                self.cursor.execute('''
+                                    INSERT INTO user_activity(inputDT, level, log, user)
+                                                     VALUES(?, ?, ?, ?)''',
+                                    (event.dt, event.level_str, event.info, event.user_name))
+
+    logger = Diary("UserActivity.txt", event=UserEvent, db=UserActivityDB)
+    logger.log("Starting app")
+    logger.debug(UserEvent("Super user logged in", user_name="super"))
+    logger.close()
+    with UserActivityDB(logger.db_file.name) as db:
+        db.cursor.execute("SELECT * FROM user_activity")
 
 Installation
 ============

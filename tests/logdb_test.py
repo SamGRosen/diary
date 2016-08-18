@@ -28,7 +28,7 @@ class TestDiaryDB(unittest.TestCase):
         self.assertEquals(table, 'logs')
 
     def test_creates_table_already_exists(self):
-        self.logdb.create_table()
+        self.logdb.create_tables()
         tables = self.logdb.cursor.execute('''SELECT name FROM sqlite_master
                                               WHERE type="table" AND name="logs"
                                            ''').fetchall()
