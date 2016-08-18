@@ -4,8 +4,9 @@ Diary
 Diary is a lightweight, no-dependency, asynchronous logging module. Diary has an
 easy to use API for the simple and extensive use case.
 
-.. image:: https://codecov.io/gh/GreenVars/diary/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/GreenVars/diary
+.. image:: https://coveralls.io/repos/github/GreenVars/diary/badge.svg?branch=master
+   :target: https://coveralls.io/github/GreenVars/diary?branch=master
+
 
 .. image:: https://img.shields.io/pypi/pyversions/diary.svg?maxAge=2592000
    :target: https://pypi.python.org/pypi/diary/
