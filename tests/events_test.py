@@ -119,7 +119,7 @@ class TestEvent(unittest.TestCase):
                 self.basicEvent, self.basicEvent.formatter)
             ):
             event.formatted()
-        event.formatter = "{info}"
+        event.set_formatter("{info}")
         old_formatted = event.formatted
         self.assertEquals(self.INFO, event.formatted())
         self.assertIsNot(old_formatted, event.formatted)
