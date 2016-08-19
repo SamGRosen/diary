@@ -39,13 +39,18 @@ if __name__ == '__main__':
     results = unittest.TestResult()
     all_tests.run(results)
 
+    failure = False
     if not (len(results.errors) == 0 and len(results.failures) == 0):
         for e in results.errors:
             print(''.join(map(str, e)))
         for f in results.failures:
             print(''.join(map(str, f)))
+        failure = True
     else:
         print("All {} tests pass.".format(results.testsRun))
 
     if cleanup:
         shutil.rmtree(TEST_DIR)
+
+    if failure:
+        raise AssertionError("Not all tests passed")
