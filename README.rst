@@ -152,35 +152,42 @@ Diary
 
     ``class Diary(path, file_name="diary.txt", db_name="diary.db", event=events.Event, log_format=formats.standard, db=logdb.DiaryDB, async=True, debug_enabled=True)``
 
-* path
-* file_name
-* db_name
-* event
-* log_format
-* db
-* async
-* debug_enabled
+* path *str* of a path pointing to:
+    - An empty directory where Diary will create a db and log
+    - A text file where Diary will append
+    - A database file where Diary will read and write
+    - A directory with a database and txt file
+        - looks for file_name and db_name arguments
+    - A nonexistent path where a db or log will be made
+* file_name *str* name for diary to look for during initialization or name of log file to be made
+* db_name *str* name for diary to look for during initialization or name of db file
+* event *Event* Event class which will initialize with logged strings
+* log_format *function* which takes an event parameter and outputs a formatted string
+* db *DiaryDB* Database type to be constructed for logging
+* async *bool* Whether or not Diary should run in async mode
+* debug_enabled *bool* Whether or not Diary should allow debug log level
 
 **Fields** *(Not listed above)*
 
-* db_file
-* last_logged_event
-* log_file
-* logdb
-* thread
-* timer
+* db_file *File* where database is stored
+* last_logged_event *Event* last event that was logged
+* log_file *File* where log file is stored
+* logdb *DiaryDB* set during set_db; DiaryDB instance that is stored to
+* thread *DiaryThread* if run in async mode, the thread that is handling logging
+* timer *RepeatedTimer* set during set_timer; thread to repeat a function
+   - Useful for logging information every interval (such as app status)
 
 **Methods**
 
-* close
-* debug
-* error
-* info
-* log
-* set_db
-* set_timer
-* warn
-* write
+* close() Close the resources used (automatically called on exit)
+* debug(info, \*\*kwargs) Log info with the debug level, kwargs passed to levels.debug
+* error(info, \*\*kwargs) Log info with the error level, kwargs passed to levels.error
+* info(info, \*\*kwargs) Log info with the info level, kwargs passed to levels.info
+* log(info, level=levels.info, \*\*kwargs) Log info with the specified level, kwargs passed to level
+* set_db() To keep a db thread safe this is called by the DiaryThread or in the constructor if async is False
+* set_timer(func, interval, \*args, \*\*kwargs) Set a func to be called every interval with given parameters
+* warn(info, \*\*kwargs) Log info with the warn level, kwargs passed to levels.warn
+* write(event) Write an event to log_file, db_file, or both
 
 Event
 -----
