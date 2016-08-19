@@ -10,11 +10,11 @@ python:
   - "3.5"
 
 install:
-  - pip install codecov
+  - pip install python-coveralls
   - pip install coverage
 
 script:
   - coverage run tests/run_tests.py
 
 after_success:
-  - codecov
+  - coveralls
