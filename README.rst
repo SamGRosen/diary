@@ -28,11 +28,34 @@ Features
     - Database configurations
     - Logging levels
 
+Installation
+============
+
+From pypi::
+
+    $ pip install diary
+
+Or::
+
+    $ easy_install diary
+
+Or clone from github::
+
+    $ git clone https://github.com/GreenVars/diary.git
+    $ cd diary
+    $ sudo python setup.py install
+
+Support
+-------
+Please feel free to make issues on the `github repo. <http://github.com/GreenVars/diary>`_
+
+Pull requests are more than welcome.
+
 Simple API
-----------
+==========
 
 Quick Use
-^^^^^^^^^
+---------
 Import the main object::
 
     from diary import Diary
@@ -51,10 +74,8 @@ Use different logging levels::
     logger.error("Contact admin")
     logger.debug("Failed import; using alternate")
 
-
-
 Customization
-^^^^^^^^^^^^^
+-------------
 
 Defining a custom level::
 
@@ -62,12 +83,12 @@ Defining a custom level::
 
     @log_level
     def critical(event):
-        event.info = "!!" + event.info + "!!"
+        event.info = "!! " + event.info + " !!"
 
     logger = Diary("EmergencyLogs.log")
     logger.log("URGENT ATTENTION NEEDED", level=critical)
     with open(logger.log_file.name) as f:
-        print(f.readline()) # !! [CRITICAL]:[2016-08-15 05:12:27.566642]: URGENT ATTENTION NEEDED !!
+        print(f.readline())  # [CRITICAL]:[2016-08-15 05:12:27.566642]: !! URGENT ATTENTION NEEDED !!
 
 Defining a custom formatter::
 
@@ -122,39 +143,88 @@ Using a custom database::
     with UserActivityDB(logger.db_file.name) as db:
         db.cursor.execute("SELECT * FROM user_activity")
 
-Installation
-============
-
-From pypi::
-
-    $ pip install diary
-
-Or::
-
-    $ easy_install diary
-
-Or clone from github::
-
-    $ git clone https://github.com/GreenVars/diary.git
-    $ cd diary
-    $ sudo python setup.py install
-
-
-Upgrading
----------
-To upgrade to the latest version::
-
-    $ pip install -U diary
-
-Support
--------
-Please feel free to make issues on the `github repo. <http://github.com/GreenVars/diary>`_
-
-Pull requests are more than welcome.
-
 Documentation
 =============
 
+Diary
+-----
+**Initialization**
+
+    ``class Diary(path, file_name="diary.txt", db_name="diary.db", event=events.Event, log_format=formats.standard, db=logdb.DiaryDB, async=True, debug=True)``
+
+* path
+* file_name
+* db_name
+* event
+* log_format
+* db
+* async
+* debug
+
+**Fields**
+
+**Methods**
+
+* close
+* debug
+* error
+* info
+* log
+* set_db
+* set_timer
+* warn
+* write
+
+Event
+-----
+**Initialization**
+    ``class Event(info, level=None, dt=None)``
+
+**Fields**
+
+**Methods**
+
+**Inheriting**
+
+DiaryDB
+-------
+**Initialization**
+
+**Fields**
+
+**Methods**
+
+**Inheriting**
+
+DiaryThread
+-----------
+**Initialization**
+
+**Fields**
+
+**Methods**
+
+**Inheriting**
+
+formats
+-------
+* alarms
+* easy_read
+* minimal
+* standard
+* stringify_info
+* stringify_level
+
+levels
+------
+log_level
+^^^^^^^^^
+
+* debug
+* error
+* info
+* log
+* warn
 
 Copyrights and License
 ======================
