@@ -242,7 +242,7 @@ DiaryDB can be used in a context manager.
 
 **Methods**
 
-* ``assert_event_logged(log, level='%', limit=-1)``
+* ``assert_event_logged(log, level='%', limit=-1)`` Assert that an event matching the given parameters exists
 * ``close()`` Close the database connection
 * ``create_tables()`` Called on construction, creates tables in database for use
 * ``log(event)`` Log an event into the database, automatically commits executions.
