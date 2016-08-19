@@ -150,7 +150,7 @@ Diary
 -----
 **Initialization**
 
-    ``class Diary(path, file_name="diary.txt", db_name="diary.db", event=events.Event, log_format=formats.standard, db=logdb.DiaryDB, async=True, debug=True)``
+    ``class Diary(path, file_name="diary.txt", db_name="diary.db", event=events.Event, log_format=formats.standard, db=logdb.DiaryDB, async=True, debug_enabled=True)``
 
 * path
 * file_name
@@ -159,9 +159,16 @@ Diary
 * log_format
 * db
 * async
-* debug
+* debug_enabled
 
-**Fields**
+**Fields** *(Not listed above)*
+
+* db_file
+* last_logged_event
+* log_file
+* logdb
+* thread
+* timer
 
 **Methods**
 
@@ -180,9 +187,16 @@ Event
 **Initialization**
     ``class Event(info, level=None, dt=None)``
 
-**Fields**
+**Fields** *(Not listed above)*
+
+* formatter
+* level_str
 
 **Methods**
+
+* formatted
+* set_formatter
+* set_level
 
 **Inheriting**
 
@@ -190,21 +204,35 @@ DiaryDB
 -------
 **Initialization**
 
-**Fields**
+**Fields** *(Not listed above)*
+
+* conn
+* cursor
 
 **Methods**
 
+* assert_event_logged
+* close
+* create_tables
+* log
+
 **Inheriting**
+
+**Using different databases**
 
 DiaryThread
 -----------
 **Initialization**
 
-**Fields**
+**Fields** *(Not listed above or inherited)*
+
+* queue
 
 **Methods**
 
-**Inheriting**
+* add
+* join
+* run
 
 formats
 -------
@@ -229,4 +257,4 @@ log_level
 Copyrights and License
 ======================
 
-Diary is protected by MIT license
+Diary is protected by the MIT license
