@@ -1,10 +1,15 @@
 from distutils.core import setup
+import os.path
+here = os.path.abspath(os.path.dirname(__file__))
 
-with open('README.rst', encoding='utf-8') as f:
-      long_description = f.read()
+try:
+      with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
+            long_description = f.read()
+except:
+      long_description = ""
 
 setup(name='diary',
-      version='1.0.0',
+      version='1.0.2',
       description='Async Logging',
       long_description=long_description,
       author='Sam Rosen',
@@ -14,7 +19,6 @@ setup(name='diary',
       classifiers=[
             'Development Status :: 4 - Beta',
             'Intended Audience :: Developers',
-            'Topic :: Software Development :: Logging Tools',
             'License :: OSI Approved :: MIT License',
             'Programming Language :: Python :: 2.7',
             'Programming Language :: Python :: 3',
