@@ -12,8 +12,8 @@ class DiaryThread(Thread):
     def __init__(self, diary, sets_db=False, name="Diary Logger"):
         """Construct a thread for logging
 
-        :param diary: An Diary instance to handle logging
-        :param sets_db: determine if self.run should call self.diary.set_db
+        :param diary: A Diary instance to handle logging
+        :param sets_db: determines if self.run should call self.diary.set_db
         :param name: A string to represent this thread
         """
         Thread.__init__(self, name=name)

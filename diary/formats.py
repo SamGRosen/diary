@@ -4,19 +4,29 @@ For help creating your own:
     https://docs.python.org/3.5/library/datetime.html#strftime-strptime-behavior
 Format functions take an event instance parameter
     def example(event):
-        return "Level: {} {}".format(event.level, event.dt, event.info)
+        return "Level: {} {} {}".format(event.level, event.dt, event.info)
 """
 
 from types import FunctionType
 
 
-def stringify_level(l):
-    if type(l) is FunctionType:
-        return l.__name__.upper()
+def stringify_level(level):
+    """Turn level functions into a clean string
+
+    :param level: any object to be stringified
+    :return: level as a string
+    """
+    if type(level) is FunctionType:
+        return level.__name__.upper()
     else:
-        return str(l)
+        return str(level)
 
 def stringify_info(info):
+    """Turn info into a readadble string
+
+    :param info:
+    :return: info as a string
+    """
     return str(info).strip()
 
 def standard(event):
@@ -45,9 +55,9 @@ def alarms(event):
     """A format to emphasize important logs
     ex: !!ERROR!!2016-07-31 21:55:00.165649!!NOOOOO!!
     """
-    seperators = "!!!" if stringify_level(event.level) == 'ERROR' else " - "
+    separators = "!!!" if stringify_level(event.level) == 'ERROR' else " - "
     return "{sep}{name}{sep}{dt}{sep}{text}{sep}".format(
-        sep=seperators,
+        sep=separators,
         name=stringify_level(event.level),
         text=stringify_info(event.info),
         dt=event.dt

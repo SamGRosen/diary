@@ -17,12 +17,12 @@ class Diary(object):
         """
         Initialization takes a file path meant to make startup simple
         :param path: str of a path pointing to:
-            * An empty directory where Diary will initiate
+            * An empty directory where Diary will create a db and log
             * A text file where Diary will append
             * A database file where Diary will read and write
             * A directory with a database and txt file
                 - looks for file_name and db_name arguments
-            * A nonexistent path for assumed writing
+            * A nonexistent path for where a db or a log will be made
         :param file_name: a specified name for a log text file
         :param db_name: a specified name for a log database file
         :param event: Event object to construct log info
@@ -107,7 +107,13 @@ class Diary(object):
         self.logdb = self.db(self.db_file.name)
 
     def set_timer(self, interval, func, *args, **kwargs):
-        """Set a timer to log an event at every interval"""
+        """Set a timer to log an event at every interval
+
+        :param interval: time in milliseconds to repeat func
+        :param func: func to execute
+        :param args: args to pass into func
+        :param kwargs: kwargs to pass into func
+        """
         if self.async is False:
             raise RuntimeError("In order to set a timer async must be enabled")
 

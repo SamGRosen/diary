@@ -7,7 +7,7 @@ class DiaryDB(object):
     DiaryDB should be inherited from and create_table and log should
     be overridden in such a way to store an event in the database.
     DiaryDB.log must take a first argument that is an event with information
-    to log.
+    to log. DiaryDB uses SQLite3.
     """
 
     def __init__(self, path):
@@ -22,8 +22,7 @@ class DiaryDB(object):
 
     def create_tables(self):
         """
-        Create a table to accommodate an event class. Attempts to create
-        the table but if the table already exists the program continues.
+        Create tables to accommodate an event class
         """
         self.cursor.execute('''
                 CREATE TABLE IF NOT EXISTS logs
