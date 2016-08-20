@@ -4,6 +4,7 @@ output
 *.pyc
 .pypirc
 /dist/
+examples/file_processing/file_info/
 tests/testing_dir/
 *.coverage
 coverage.xml
