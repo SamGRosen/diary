@@ -9,6 +9,7 @@ except:
       long_description = ""
 
 setup(name='diary',
+      packages=['diary'],
       version='1.0.2',
       description='Async Logging',
       long_description=long_description,
