@@ -9,3 +9,4 @@ tests/testing_dir/
 *.coverage
 coverage.xml
 venv/
+*.swp
