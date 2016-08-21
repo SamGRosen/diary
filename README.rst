@@ -228,6 +228,7 @@ DiaryDB
 DiaryDB is used to log Events into a database. DiaryDB uses SQLite3 but this can be changed by creating your own DiaryDB subclass.
 
 DiaryDB can be used in a context manager.
+
 ``with DiaryDB("path/to/file") as db:``
 
 **Initialization**
