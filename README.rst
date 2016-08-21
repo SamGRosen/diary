@@ -323,6 +323,30 @@ Keyword arguments are always passed into the decorated level function.
 * ``warn(event, log_trace=False)`` Warnings for potential issues
    - ``log_trace`` *bool* Add to event.info the stacktrace leading up to the warning
 
+Contributing
+============
+
+Getting Started
+---------------
+Right now, diary is looking for contributors to help create formats, levels, and different database configurations. To begin contributing:
+
+1. Fork or clone the repository ::
+
+     git clone https://github.com/GreenVars/diary.git
+
+2. Read the source and setup a virtual environment ::
+
+     virtualenv venv
+     source venv/bin/activate
+
+3. Run the unit tests ::
+
+     python tests/run_tests.py
+
+4. Implement your changes and write unit tests for them.
+
+5. Submit a pull request.
+
 License
 =======
 
