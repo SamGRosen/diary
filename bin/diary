@@ -31,7 +31,7 @@ def generate(args):
     # Make sure there was a subcommand passed
     if not args.index('generate') >= len(args):
         if args[args.index('generate') + 1] == 'sqlite':
-            generate_sqlite()
+            generate_sqlite(args)
         else:
             print('The only database currently supported for diary is sqlite3.')
             help()
@@ -40,9 +40,13 @@ def generate(args):
         help()
 
 # Generate subcommand for sqlite database
-def generate_sqlite():
+def generate_sqlite(args):
+    if not args.index('sqlite') >= len(args):
+        path = args[args.index('sqlite') + 1]
+    else:
+        path = 'log.sqlite3'
     cwd = os.getcwd()
-    connection = sqlite3.connect(os.path.join(cwd, 'log.sqlite3'))
+    connection = sqlite3.connect(os.path.join(cwd, path))
     cursor = connection.cursor()
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS logs
