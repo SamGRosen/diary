@@ -41,7 +41,7 @@ def generate(args):
 
 # Generate subcommand for sqlite database
 def generate_sqlite(args):
-    if not args.index('sqlite') >= len(args):
+    if not args.index('sqlite') + 1 >= len(args):
         path = args[args.index('sqlite') + 1]
     else:
         path = 'log.sqlite3'
