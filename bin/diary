@@ -52,7 +52,7 @@ def generate_sqlite(args):
     CREATE TABLE IF NOT EXISTS logs
     (inputDT TIMESTAMP, level TEXT, log TEXT)
     ''')
-    print('sqlite3 database generated at %s' % os.path.join(cwd, 'log.sqlite3'))
+    print('sqlite3 database generated at %s' % os.path.join(cwd, path))
 
 if __name__ == '__main__':
     diary()
