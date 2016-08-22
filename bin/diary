@@ -1,6 +1,6 @@
 #!/user/bin/env python
 
-import sys
+import sys, os, sqlite3
 
 # Main function - passes commands into their own functions
 def diary():
@@ -19,21 +19,21 @@ Usage:
   diary <command> [options]
 
 Commands:
-  generate sqlite          Generates sqlite3 database for diary.
+  generate sqlite       Generates sqlite3 database for diary.
 
 General Options:
-  -h, --help               Show help.
+  -h, --help            Show help.
     """
     print(output)
 
 # Generate command
 def generate(args):
     # Make sure there was a subcommand passed
-    if args.index('generate') >= len(args):
+    if not args.index('generate') >= len(args):
         if args[args.index('generate') + 1] == 'sqlite':
             generate_sqlite()
         else:
-            print('The only database currently supported for diary generators is sqlite3.')
+            print('The only database currently supported for diary is sqlite3.')
             help()
     else:
         print('You must pass a subcommand to the generate command.')
@@ -41,7 +41,14 @@ def generate(args):
 
 # Generate subcommand for sqlite database
 def generate_sqlite():
-    print('sqlite3 generation is yet to be implemented.')
+    cwd = os.getcwd()
+    connection = sqlite3.connect(os.path.join(cwd, 'log.sqlite3'))
+    cursor = connection.cursor()
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS logs
+    (inputDT TIMESTAMP, level TEXT, log TEXT)
+    ''')
+    print('sqlite3 database generated at %s' % os.path.join(cwd, 'log.sqlite3'))
 
 if __name__ == '__main__':
     diary()
