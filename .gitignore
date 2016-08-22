@@ -11,3 +11,4 @@ coverage.xml
 venv/
 *.swp
 build/
+log.sqlite3
