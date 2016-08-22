@@ -10,3 +10,4 @@ tests/testing_dir/
 coverage.xml
 venv/
 *.swp
+build/
