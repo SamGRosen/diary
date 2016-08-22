@@ -10,6 +10,7 @@ except:
 
 setup(name='diary',
       packages=['diary'],
+      scripts=['bin/diary'],
       version='0.1.0',
       description='Async Logging',
       long_description=long_description,

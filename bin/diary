@@ -1,0 +1,7 @@
+#!/user/bin/env python
+
+def diary():
+    print('Coming soon...')
+
+if __name__ == '__main__':
+    diary()
