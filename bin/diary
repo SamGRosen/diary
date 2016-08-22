@@ -19,10 +19,10 @@ Usage:
   diary <command> [options]
 
 Commands:
-  generate sqlite       Generates sqlite3 database for diary.
+  generate sqlite [path]      Generates sqlite3 database for diary at path. Default path is log.sqlite3.
 
 General Options:
-  -h, --help            Show help.
+  -h, --help                  Show help.
     """
     print(output)
 
