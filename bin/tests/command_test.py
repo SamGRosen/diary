@@ -1,5 +1,5 @@
 from __future__ import absolute_import
-from bin import diary
+# from bin import diary
 import os
 import unittest
 
@@ -10,9 +10,9 @@ class SqliteTest(unittest.TestCase):
     def test_command(self):
         print(os.path.join(os.path.dirname(__file__), 'testing_dir'))
         command = 'python ../diary.py generate sqlite %s/log.sqlite3' % self.TESTING_DIR
-        args = command.split()
-        diary.diary(args=args)
-
+        # args = command.split()
+        # diary.diary(args=args)
+        os.system(command)
         self.assertTrue(os.path.exists('testing_dir/log.sqlite3'))
 
 if __name__ == '__main__':
