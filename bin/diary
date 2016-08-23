@@ -5,15 +5,15 @@ import sys, os, sqlite3
 # Main function - passes commands into their own functions
 def diary():
     if '-h' in sys.argv or '--help' in sys.argv:
-        help()
+        diary_help()
     elif 'generate' in sys.argv:
         generate(sys.argv)
     else:
         print("Diary couldn't parse that command.")
-        help()
+        diary_help()
 
 # Help command
-def help():
+def diary_help():
     output = """
 Usage:
   diary <command> [options]
@@ -29,15 +29,15 @@ General Options:
 # Generate command
 def generate(args):
     # Make sure there was a subcommand passed
-    if not args.index('generate') >= len(args):
+    if not args.index('generate') + 1 >= len(args):
         if args[args.index('generate') + 1] == 'sqlite':
             generate_sqlite(args)
         else:
             print('The only database currently supported for diary is sqlite3.')
-            help()
+            diary_help()
     else:
         print('You must pass a subcommand to the generate command.')
-        help()
+        diary_help()
 
 # Generate subcommand for sqlite database
 def generate_sqlite(args):
