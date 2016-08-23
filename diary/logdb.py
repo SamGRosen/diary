@@ -10,7 +10,7 @@ class DiaryDB(object):
     to log. DiaryDB uses SQLite3.
     """
 
-    def __init__(self, path):
+    def __init__(self, path='log.sqlite3'):
         """
         Create the connection with the database and attempt to make a table.
         :param path: relative path of database

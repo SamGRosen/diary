@@ -10,3 +10,6 @@ tests/testing_dir/
 coverage.xml
 venv/
 *.swp
+*.swo
+build/
+log.sqlite3
