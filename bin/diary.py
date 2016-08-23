@@ -3,11 +3,11 @@
 import sys, os, sqlite3
 
 # Main function - passes commands into their own functions
-def diary():
-    if '-h' in sys.argv or '--help' in sys.argv:
+def diary(args=sys.argv):
+    if '-h' in args or '--help' in args:
         diary_help()
-    elif 'generate' in sys.argv:
-        generate(sys.argv)
+    elif 'generate' in args:
+        generate(args)
     else:
         print("Diary couldn't parse that command.")
         diary_help()
@@ -19,7 +19,7 @@ Usage:
   diary <command> [options]
 
 Commands:
-  generate sqlite [path]      Generates sqlite3 database for diary at path. Default path is log.sqlite3.
+  generate sqlite [path]      Generates sqlite3 database for diary.py at path. Default path is log.sqlite3.
 
 General Options:
   -h, --help                  Show help.

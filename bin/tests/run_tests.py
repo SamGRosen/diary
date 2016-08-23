@@ -1,4 +1,4 @@
-import sys, os, shutil
+import os, shutil
 import unittest
 import command_test
 
