@@ -26,8 +26,7 @@ if __name__ == '__main__':
     else:
         print("All {} tests pass.".format(results.testsRun))
 
-    if cleanup:
-        shutil.rmtree(test_directory)
+    shutil.rmtree(test_directory)
 
     if failure:
         raise AssertionError("Not all tests passed")
