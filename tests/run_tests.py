@@ -1,10 +1,14 @@
 # Setup PYTHONPATH
-import sys, os, shutil
+import os
+import shutil
+import sys
+
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
 # Import test cases
 import unittest
+import command_test
 import api_test
 import diary_test
 import events_test
@@ -28,6 +32,7 @@ if __name__ == '__main__':
 
     # Add tests
     easy_load(api_test.TestAPI)
+    easy_load(command_test.SqliteTest)
     easy_load(diary_test.TestDiary)
     easy_load(events_test.TestEvent)
     easy_load(formats_test.TestFormat)
