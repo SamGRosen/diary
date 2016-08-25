@@ -330,7 +330,7 @@ Diary comes with a command line tool, ``diary``, which can be used to generate a
 
     diary generate sqlite [path]
 
-This will generate a SQLite3 database for diary at ``[path]``. The default path is ``log.sqlite3``.
+This will generate a SQLite3 database for diary at ``[path]``. The default path is ``log.sqlite3``. You should run this command in either the root directory of your project or within a logs folder for your project. If it is ran in the root directory and you use DiaryDB, diary will automatically know where to put your logs.
 
 Contributing
 ============
