@@ -323,6 +323,15 @@ Keyword arguments are always passed into the decorated level function.
 * ``warn(event, log_trace=False)`` Warnings for potential issues
    - ``log_trace`` *bool* Add to event.info the stacktrace leading up to the warning
 
+Diary Command Line
+==================
+
+Diary comes with a command line tool, ``diary``, which can be used to generate a SQLite3 database for your diary application. Running the command is simple ::
+
+    diary generate sqlite [path]
+
+This will generate a SQLite3 database for diary at ``[path]``. The default path is ``log.sqlite3``. You should run this command in either the root directory of your project or within a logs folder for your project. If it is ran in the root directory and you use DiaryDB, diary will automatically know where to put your logs.
+
 Contributing
 ============
 
