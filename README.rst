@@ -234,7 +234,7 @@ DiaryDB can be used in a context manager.
 **Initialization**
    ``class DiaryDB(path)``
 
-* path *str* path of database to use
+* path *str* path of database to use. If no path is passed and the python command was invoked normally, it will look for a file named 'log.sqlite3' in the root folder of your application. In some edge cases when python programs aren't invoked through the process interface, you will need to pass a custom path even if 'log.sqlite3' is in the root folder of the application.
 
 **Fields** *(Not listed above)*
 
