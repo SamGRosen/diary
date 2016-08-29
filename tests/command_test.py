@@ -1,4 +1,4 @@
-import os
+import os, sys
 import unittest
 
 
@@ -9,7 +9,7 @@ class SqliteTest(unittest.TestCase):
         command = 'diary generate sqlite %s/log.sqlite3' % self.TESTING_DIR
         os.system(command)
 
-        self.assertTrue(os.path.exists(os.path.join(self.TESTING_DIR, 'log.sqlite3')))
+        self.assertTrue(os.path.exists(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'log.sqlite3')))
 
 if __name__ == '__main__':
     unittest.main()

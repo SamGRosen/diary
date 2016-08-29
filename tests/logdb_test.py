@@ -11,6 +11,7 @@ class TestDiaryDB(unittest.TestCase):
 
     def setUp(self):
         self.logdb = DiaryDB(self.TEMP_DB_PATH)
+        self.logdb_default = DiaryDB()
 
     @classmethod
     def tearDownClass(cls):
@@ -49,7 +50,6 @@ class TestDiaryDB(unittest.TestCase):
             self.logdb.conn.execute("SELECT 1 FROM logs LIMIT 1")
 
     def test_default_path(self):
-        self.logdb_default = DiaryDB()
         self.logdb_default.log(self.SIMPLE_EVENT)
         entry = self.logdb_default.cursor.execute('''SELECT * FROM logs ORDER BY
                                              inputDT ASC LIMIT 1''').fetchone()
