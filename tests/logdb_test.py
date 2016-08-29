@@ -48,5 +48,19 @@ class TestDiaryDB(unittest.TestCase):
                                msg="Cannot operate on a closed database."):
             self.logdb.conn.execute("SELECT 1 FROM logs LIMIT 1")
 
+    def test_default_path(self):
+        self.logdb_default = DiaryDB()
+        self.logdb_default.log(self.SIMPLE_EVENT)
+        entry = self.logdb_default.cursor.execute('''SELECT * FROM logs ORDER BY
+                                             inputDT ASC LIMIT 1''').fetchone()
+        self.assertEquals(entry[0], self.SIMPLE_EVENT.dt)
+        self.assertEquals(entry[1], self.SIMPLE_EVENT.level)
+        self.assertEquals(entry[2], self.SIMPLE_EVENT.info)
+        self.logdb_default.close()
+
+    def test_logdb_destroy(self):
+        self.logdb_default.destroy()
+        self.assertTrue(not os.path.exists(self.logdb_default.path))
+
 if __name__ == '__main__':
     unittest.main()

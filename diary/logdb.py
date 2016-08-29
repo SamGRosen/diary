@@ -18,12 +18,12 @@ class DiaryDB(object):
         """
         if path is None:
             if sys.argv[0]:
-                self.path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])))
+                self.path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'log.sqlite3')
             else:
                 self.path = 'log.sqlite3'
         else:
             self.path = path
-        self.conn = sqlite3.connect(path, detect_types=sqlite3.PARSE_DECLTYPES)
+        self.conn = sqlite3.connect(self.path, detect_types=sqlite3.PARSE_DECLTYPES)
         self.cursor = self.conn.cursor()
         self.create_tables()
 
@@ -68,6 +68,10 @@ class DiaryDB(object):
             self.conn.close()
         except sqlite3.ProgrammingError:
             pass
+
+    def destroy(self):
+        """Destroy the SQLite database file."""
+        os.remove(self.path)
 
     def __enter__(self):
         return self
