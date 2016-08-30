@@ -58,9 +58,5 @@ class TestDiaryDB(unittest.TestCase):
         self.assertEquals(entry[2], self.SIMPLE_EVENT.info)
         self.logdb_default.close()
 
-    def test_logdb_destroy(self):
-        self.logdb_default.destroy()
-        self.assertTrue(not os.path.exists(self.logdb_default.path))
-
 if __name__ == '__main__':
     unittest.main()

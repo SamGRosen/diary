@@ -69,10 +69,6 @@ class DiaryDB(object):
         except sqlite3.ProgrammingError:
             pass
 
-    def destroy(self):
-        """Destroy the SQLite database file."""
-        os.remove(self.path)
-
     def __enter__(self):
         return self
 
