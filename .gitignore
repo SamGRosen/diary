@@ -12,4 +12,4 @@ venv/
 *.swp
 *.swo
 build/
-log.sqlite3
+*.sqlite3

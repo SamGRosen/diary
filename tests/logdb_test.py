@@ -52,10 +52,11 @@ class TestDiaryDB(unittest.TestCase):
     def test_default_path(self):
         self.logdb_default.log(self.SIMPLE_EVENT)
         entry = self.logdb_default.cursor.execute('''SELECT * FROM logs ORDER BY
-                                             inputDT ASC LIMIT 1''').fetchone()
+                                             inputDT DESC LIMIT 1''').fetchone()
         self.assertEquals(entry[0], self.SIMPLE_EVENT.dt)
         self.assertEquals(entry[1], self.SIMPLE_EVENT.level)
         self.assertEquals(entry[2], self.SIMPLE_EVENT.info)
+
         self.logdb_default.close()
 
 if __name__ == '__main__':
