@@ -11,6 +11,7 @@ class TestDiaryDB(unittest.TestCase):
 
     def setUp(self):
         self.logdb = DiaryDB(self.TEMP_DB_PATH)
+        self.logdb_default = DiaryDB()
 
     @classmethod
     def tearDownClass(cls):
@@ -47,6 +48,15 @@ class TestDiaryDB(unittest.TestCase):
         with self.assertRaises(sqlite3.ProgrammingError,
                                msg="Cannot operate on a closed database."):
             self.logdb.conn.execute("SELECT 1 FROM logs LIMIT 1")
+
+    def test_default_path(self):
+        self.logdb_default.log(self.SIMPLE_EVENT)
+        entry = self.logdb_default.cursor.execute('''SELECT * FROM logs ORDER BY
+                                             inputDT ASC LIMIT 1''').fetchone()
+        self.assertEquals(entry[0], self.SIMPLE_EVENT.dt)
+        self.assertEquals(entry[1], self.SIMPLE_EVENT.level)
+        self.assertEquals(entry[2], self.SIMPLE_EVENT.info)
+        self.logdb_default.close()
 
 if __name__ == '__main__':
     unittest.main()

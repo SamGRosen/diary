@@ -1,4 +1,5 @@
 import sqlite3
+import os, sys
 
 
 class DiaryDB(object):
@@ -10,13 +11,19 @@ class DiaryDB(object):
     to log. DiaryDB uses SQLite3.
     """
 
-    def __init__(self, path='log.sqlite3'):
+    def __init__(self, path=None):
         """
         Create the connection with the database and attempt to make a table.
         :param path: relative path of database
         """
-        self.path = path
-        self.conn = sqlite3.connect(path, detect_types=sqlite3.PARSE_DECLTYPES)
+        if path is None:
+            if sys.argv[0]:
+                self.path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'log.sqlite3')
+            else:
+                self.path = 'log.sqlite3'
+        else:
+            self.path = path
+        self.conn = sqlite3.connect(self.path, detect_types=sqlite3.PARSE_DECLTYPES)
         self.cursor = self.conn.cursor()
         self.create_tables()
 
