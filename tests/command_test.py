@@ -25,6 +25,12 @@ class SqliteTest(unittest.TestCase):
         self.assertTrue(os.path.exists(target_path))
         os.remove(target_path)
 
+    def test_command_weird_extension(self):
+        command = 'diary generate sqlite mylog.diary.log'
+        os.system(command)
+        target_path = os.path.join(os.getcwd(), 'mylog.diary.log')
+        self.assertTrue(os.path.exists(target_path))
+        os.remove(target_path)
 
 if __name__ == '__main__':
     unittest.main()
