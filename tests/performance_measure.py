@@ -48,7 +48,7 @@ def test_simple_performance_no_db(trials=TRIAL_COUNT):
     simple_logger = Diary(os.path.join(TEST_DIR, "simple_no_db.log"), async=True)
     for i in range(trials):
         simple_logger.log("info")
-    simple_logger.close() # TODO Fix closing before all logs are processed
+    simple_logger.close()
 
 @timed
 def test_simple_performance_no_log_file(trials=TRIAL_COUNT):

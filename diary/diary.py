@@ -71,10 +71,12 @@ class Diary(object):
         @atexit.register
         def cleanup():
             """Called on system exit to ensure logs are saved."""
+            if self.async:
+                self.thread.join()
+
             if self.db_file:
                 self.db_file.close()
-                if self.async:
-                    self.thread.join()
+
                 self.logdb.close()
             if self.log_file:
                 self.log_file.close()
