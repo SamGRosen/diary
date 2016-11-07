@@ -37,18 +37,18 @@ class Diary(object):
         self.db_file = None
         if os.path.exists(path):
             if os.path.isdir(path):
-                self.log_file = open(os.path.join(path, file_name), 'a')
+                self.log_file = open(os.path.join(path, file_name), 'a', 1)
                 self.db_file = open(os.path.join(path, db_name), 'a')
             elif os.path.isfile(path):
                 head, tail = os.path.split(path)
                 _, ext = os.path.splitext(tail)
                 if ext == '':
-                    self.log_file = open(path, 'a')
+                    self.log_file = open(path, 'a', 1)
                 elif tail == db_name or ext[1:] in ('db', 'sql', 'sqlite',
                                                     'sqlite3'):
                     self.db_file = open(path, 'a')
                 elif tail == file_name or ext[1:] in ('txt', 'text', 'log'):
-                    self.log_file = open(path, 'a')
+                    self.log_file = open(path, 'a', 1)
                 else:
                     raise ValueError("Could not resolve to database or text file {}".format(
                         path))
@@ -62,9 +62,9 @@ class Diary(object):
                     if ext[1:] in ('db', 'sql', 'sqlite', 'sqlite3'):
                         self.db_file = open(path, 'a')
                     else:
-                        self.log_file = open(path, 'a')
+                        self.log_file = open(path, 'a', 1)
                 else:
-                    self.log_file = open(path, 'a')
+                    self.log_file = open(path, 'a', 1)
             except Exception as e:
                 raise e
 
