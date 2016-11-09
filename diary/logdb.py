@@ -43,11 +43,18 @@ class DiaryDB(object):
 
         :param event: event object to commit to db
         """
-        with self.conn:
-            self.cursor.execute('''
-                                INSERT INTO logs(inputDT, level, log)
-                                                 VALUES(?, ?, ?)''',
-                                (event.dt, event.level_str, event.info))
+        try:
+            with self.conn:
+                self.cursor.execute('''
+                                    INSERT INTO logs(inputDT, level, log)
+                                                     VALUES(?, ?, ?)''',
+                                    (event.dt, event.level_str, event.info))
+        except sqlite3.ProgrammingError:
+            raise ValueError("""diary does not support logging unicode strings into a database in ython2.
+    To avoid this:
+        1. Ensure your strings are converted to the 'str' type before logging
+        2. Write your own implementation of DiaryDB that can handle unicode
+            """)
 
     def assert_event_logged(self, log, level='%', limit=-1):
         """Testing method to ensure an event is logged

@@ -1,8 +1,10 @@
 from diary import Diary, DiaryDB, Event, levels
 import unittest
-import shutil
+import codecs
+import sys
 import os
 
+_PY2 = sys.version_info[0] == 2
 
 # Helper methods
 def exists_with_ext(path, ext):
@@ -116,7 +118,7 @@ class TestDiary(unittest.TestCase):
             ), '.txt')
         )
 
-        log.write(simple_event)
+        log._write(simple_event)
         log.logdb.assert_event_logged(self.INFO, level="LEVEL")
         log.close()
 
@@ -272,6 +274,45 @@ class TestDiary(unittest.TestCase):
         with DiaryDB(log.db_file.name) as db:
             entries = db.cursor.execute("SELECT * FROM logs")
             self.assertEquals(len(entries.fetchall()), trials)
+
+    def test_unicode_PY2(self):
+        if not _PY2:
+            return
+
+        unicode_str = u"\u3002"
+        log = Diary(os.path.join(self.INIT_DIR, "unicode_test.log"), async=False, encoding="utf-8")
+
+        log.log(unicode_str)
+
+        log.close()
+
+        with codecs.open(log.log_file.name, encoding=log.encoding) as f:
+            line = f.readline()
+            self.assertTrue(unicode_str in line)
+
+    def test_unicode_PY3(self):
+        if _PY2:
+            return
+
+        unicode_str = u"\u3002"
+        log = Diary(self.INIT_DIR, file_name="unicode_test.log", async=False)
+
+        log.log(unicode_str)
+
+        log.close()
+
+        with codecs.open(log.log_file.name, encoding=log.encoding) as f:
+            line = f.readline()
+            self.assertTrue(unicode_str in line)
+
+    def test_unicode_PY2_DB_error(self):
+        if not _PY2:
+            return
+
+        unicode_str =  u"\u3002"
+        log = Diary(self.INIT_DIR, async=False, file_name="unicode_test.log", db_name="unicode.db")
+        with self.assertRaises(ValueError, msg="diary does not support logging unicode strings into a database in python2"):
+            log.log(unicode_str)
 
 
 if __name__ == '__main__':

@@ -1,11 +1,15 @@
 from __future__ import absolute_import
 import atexit
 import os.path
+import codecs
+import sys
 
 from diary import logdb
 from diary import levels
 from diary import formats
 from diary import events
+
+_PY2 = sys.version_info[0] == 2
 
 
 class Diary(object):
@@ -13,7 +17,8 @@ class Diary(object):
 
     def __init__(self, path, file_name="diary.txt", db_name="diary.db",
                  event=events.Event, log_format=formats.standard,
-                 db=logdb.DiaryDB, async=True, debug_enabled=True):
+                 db=logdb.DiaryDB, async=True, debug_enabled=True,
+                 encoding="utf-8"):
         """
         Initialization takes a file path meant to make startup simple
         :param path: str of a path pointing to:
@@ -29,26 +34,28 @@ class Diary(object):
         :param log_format: function to format logging info (see formats.py)
         :param db: database class for reading/writing database
         :param async: boolean if logging should occur in own thread
-        :param debug: boolean if logger supports debugging
+        :param debug_enabled: boolean if logger supports debugging
+        :param encoding: str type of encoding to use for writing to log file
         """
 
         self.path = path
+        self.encoding = encoding
         self.log_file = None
         self.db_file = None
         if os.path.exists(path):
             if os.path.isdir(path):
-                self.log_file = open(os.path.join(path, file_name), 'a', 1)
+                self.log_file = codecs.open(os.path.join(path, file_name), mode='a+', buffering=1, encoding=self.encoding)
                 self.db_file = open(os.path.join(path, db_name), 'a')
             elif os.path.isfile(path):
                 head, tail = os.path.split(path)
                 _, ext = os.path.splitext(tail)
                 if ext == '':
-                    self.log_file = open(path, 'a', 1)
+                    self.log_file = codecs.open(path, mode='a+', buffering=1, encoding=self.encoding)
                 elif tail == db_name or ext[1:] in ('db', 'sql', 'sqlite',
                                                     'sqlite3'):
                     self.db_file = open(path, 'a')
                 elif tail == file_name or ext[1:] in ('txt', 'text', 'log'):
-                    self.log_file = open(path, 'a', 1)
+                    self.log_file = codecs.open(path, mode='a+', buffering=1, encoding=self.encoding)
                 else:
                     raise ValueError("Could not resolve to database or text file {}".format(
                         path))
@@ -62,9 +69,9 @@ class Diary(object):
                     if ext[1:] in ('db', 'sql', 'sqlite', 'sqlite3'):
                         self.db_file = open(path, 'a')
                     else:
-                        self.log_file = open(path, 'a', 1)
+                        self.log_file = codecs.open(path, mode='a+', buffering=1, encoding=self.encoding)
                 else:
-                    self.log_file = open(path, 'a', 1)
+                    self.log_file = codecs.open(path, mode='a+', buffering=1, encoding=self.encoding)
             except Exception as e:
                 raise e
 
@@ -123,7 +130,7 @@ class Diary(object):
         self.timer = RepeatedTimer(interval, func, args=args, kwargs=kwargs)
         self.timer.start()
 
-    def write(self, event):
+    def _write(self, event):
         """Write an event object to the proper channel
 
         :param event: event object to log
@@ -133,10 +140,14 @@ class Diary(object):
 
         if self.log_file:
             if event.formatter is None:
-                self.log_file.write(self.format(event) + '\n')
+                to_write = self.format(event) + '\n'
             else:
-                self.log_file.write(event.formatted() + '\n')
+                to_write = event.formatted() + '\n'
 
+            if _PY2:
+                to_write = to_write.decode(self.encoding)
+
+            self.log_file.write(to_write)
         self.last_logged_event = event
 
     def log(self, info, level=levels.info, **kwargs):
@@ -149,10 +160,14 @@ class Diary(object):
             event_to_log = info
         else:
             event_to_log = self.event(info, level)
+
+        if _PY2 and isinstance(event_to_log.info, unicode):  # short-circuiting at its best
+            event_to_log.info = event_to_log.info.encode(self.encoding)
+
         if self.async:
             level(event_to_log, self.thread.add, **kwargs)
         else:
-            level(event_to_log, self.write, **kwargs)
+            level(event_to_log, self._write, **kwargs)
 
     def info(self, info, **kwargs):
         """Log general info

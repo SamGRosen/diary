@@ -8,3 +8,4 @@ diary/formats.py
 diary/levels.py
 diary/logdb.py
 diary/logthread.py
+diary/bin/diary

@@ -44,4 +44,4 @@ class DiaryThread(Thread):
             received = self.queue.get()
             if received is None:
                 return
-            self.diary.write(received)
+            self.diary._write(received)
