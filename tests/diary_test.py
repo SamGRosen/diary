@@ -275,6 +275,22 @@ class TestDiary(unittest.TestCase):
             entries = db.cursor.execute("SELECT * FROM logs")
             self.assertEquals(len(entries.fetchall()), trials)
 
+    def test_unicode_event_formatted(self):
+        class PrettyEvent(Event):
+            formatter = "{info}|{level_str}"
+
+        unicode_str = u"\u3002"
+        log = Diary(os.path.join(self.INIT_DIR, "unicode_test.log"), async=False, encoding="utf-8", event=PrettyEvent)
+
+        log.log(unicode_str)
+
+        log.close()
+
+        with codecs.open(log.log_file.name, encoding=log.encoding) as f:
+            line = f.readline()
+            self.assertTrue(unicode_str in line)
+
+
     def test_unicode_PY2(self):
         if not _PY2:
             return
