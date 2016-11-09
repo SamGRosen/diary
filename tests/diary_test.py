@@ -2,6 +2,7 @@ from diary import Diary, DiaryDB, Event, levels
 import unittest
 import codecs
 import sys
+import io
 import os
 
 _PY2 = sys.version_info[0] == 2
@@ -329,6 +330,19 @@ class TestDiary(unittest.TestCase):
         log = Diary(self.INIT_DIR, async=False, file_name="unicode_test.log", db_name="unicode.db")
         with self.assertRaises(ValueError, msg="diary does not support logging unicode strings into a database in python2"):
             log.log(unicode_str)
+
+    def test_diary_print(self):
+        log = Diary(self.INIT_DIR, file_name="printing.log", also_print=True)
+
+        info_to_log = "hello there world!!!"
+
+        log.info(info_to_log)
+
+        log.close()
+
+        # Nothing bad happened and stdout is hard to capture reliably
+        with open(log.log_file.name) as f:
+            self.assertTrue(info_to_log in f.readline())
 
 
 if __name__ == '__main__':

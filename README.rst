@@ -169,6 +169,8 @@ Diary is highest level part of the API; it is where all events are logged and pr
 * ``db`` *DiaryDB* Database type to be constructed for logging
 * ``async`` *bool* Whether or not Diary should run in async mode
 * ``debug_enabled`` *bool* Whether or not Diary should allow debug log level
+* ``encoding`` *str* type of encoding for log file to use
+* ``also_print`` *bool* if logged events should also print to stdout
 
 **Fields** *(Not listed above)*
 

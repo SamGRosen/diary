@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import print_function
 import atexit
 import os.path
 import codecs
@@ -18,7 +19,7 @@ class Diary(object):
     def __init__(self, path, file_name="diary.txt", db_name="diary.db",
                  event=events.Event, log_format=formats.standard,
                  db=logdb.DiaryDB, async=True, debug_enabled=True,
-                 encoding="utf-8"):
+                 encoding="utf-8", also_print=True):
         """
         Initialization takes a file path meant to make startup simple
         :param path: str of a path pointing to:
@@ -36,12 +37,14 @@ class Diary(object):
         :param async: boolean if logging should occur in own thread
         :param debug_enabled: boolean if logger supports debugging
         :param encoding: str type of encoding to use for writing to log file
+        :param also_print: boolean if a logged statement will also be printed to the console
         """
 
         self.path = path
         self.encoding = encoding
         self.log_file = None
         self.db_file = None
+        self.also_print = also_print
         if os.path.exists(path):
             if os.path.isdir(path):
                 self.log_file = codecs.open(os.path.join(path, file_name), mode='a+', buffering=1, encoding=self.encoding)
@@ -148,6 +151,10 @@ class Diary(object):
                 to_write = to_write.decode(self.encoding)
 
             self.log_file.write(to_write)
+
+            if self.also_print:
+                print(to_write)
+
         self.last_logged_event = event
 
     def log(self, info, level=levels.info, **kwargs):
