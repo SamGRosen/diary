@@ -60,11 +60,11 @@ class Diary(object):
                 elif tail == file_name or ext[1:] in ('txt', 'text', 'log'):
                     self.log_file = codecs.open(path, mode='a+', buffering=1, encoding=self.encoding)
                 else:
-                    raise ValueError("Could not resolve to database or text file {}".format(
+                    raise ValueError("Could not resolve to database or text file: {}".format(
                         path))
             else:
-                raise ValueError("Could not handle path: {} | {}".format(
-                    path, "Was not found a directory or file"))
+                raise ValueError("Could not handle path: {} | did not find a directory or file".format(
+                    path))
         else:
             try:
                 _, ext = os.path.splitext(path)

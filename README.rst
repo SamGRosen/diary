@@ -8,12 +8,14 @@ easy to use API for the simple and extensive use case.
    :target: https://coveralls.io/github/SamGRosen/diary?branch=master
 
 
-.. image:: https://img.shields.io/pypi/pyversions/diary.svg?maxAge=2592000
-   :target: https://pypi.python.org/pypi/diary/
+.. image:: https://img.shields.io/pypi/pyversions/diary.svg
+   :alt: PyPI - Python Version
+   :target: https://pypi.org/project/diary/
 
 
-.. image:: https://img.shields.io/pypi/v/diary.svg?maxAge=2592000
-   :target: https://pypi.python.org/pypi/diary/
+.. image:: https://img.shields.io/pypi/v/diary.svg
+   :alt: PyPI
+   :target: https://pypi.org/project/diary/
 
 
 .. contents:: Table of Contents

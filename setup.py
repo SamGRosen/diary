@@ -11,7 +11,7 @@ except:
 setup(name='diary',
       packages=['diary'],
       scripts=['diary/bin/diary'],
-      version='0.1.5',
+      version='0.1.6',
       description='Async Logging',
       long_description=long_description,
       author='Sam Rosen',

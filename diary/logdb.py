@@ -50,7 +50,7 @@ class DiaryDB(object):
                                                      VALUES(?, ?, ?)''',
                                     (event.dt, event.level_str, event.info))
         except sqlite3.ProgrammingError:
-            raise ValueError("""diary does not support logging unicode strings into a database in ython2.
+            raise ValueError("""diary does not support logging unicode strings into a database in Python2.
     To avoid this:
         1. Ensure your strings are converted to the 'str' type before logging
         2. Write your own implementation of DiaryDB that can handle unicode
