@@ -4,8 +4,8 @@ Diary
 Diary is a lightweight, no-dependency, asynchronous logging module. Diary has an
 easy to use API for the simple and extensive use case.
 
-.. image:: https://coveralls.io/repos/github/GreenVars/diary/badge.svg?branch=master
-   :target: https://coveralls.io/github/GreenVars/diary?branch=master
+.. image:: https://coveralls.io/repos/github/SamGRosen/diary/badge.svg?branch=master
+   :target: https://coveralls.io/github/SamGRosen/diary?branch=master
 
 
 .. image:: https://img.shields.io/pypi/pyversions/diary.svg?maxAge=2592000
@@ -41,13 +41,13 @@ Or::
 
 Or clone from github::
 
-    $ git clone https://github.com/GreenVars/diary.git
+    $ git clone https://github.com/SamGRosen/diary.git
     $ cd diary
     $ sudo python setup.py install
 
 Support
 -------
-Please feel free to make issues on the `github repo. <http://github.com/GreenVars/diary>`_
+Please feel free to make issues on the `github repo. <https://github.com/SamGRosen/diary>`_
 
 Pull requests are more than welcome.
 
@@ -114,7 +114,7 @@ Using a custom event::
 
         def __init__(self, info, level=None, user_name=""):
               Event.__init__(self, info, level)
-              self.user_name = ""
+              self.user_name = user_name
 
     logger = Diary("UserEvents.txt", event=UserEvent)
     logger.log("Start logging")
@@ -343,7 +343,7 @@ Right now, diary is looking for contributors to help create formats, levels, and
 
 1. Fork or clone the repository ::
 
-     git clone https://github.com/GreenVars/diary.git
+     git clone https://github.com/SamGRosen/diary.git
 
 2. Read the source and setup a virtual environment ::
 
