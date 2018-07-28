@@ -11,6 +11,7 @@ easy to use API for the simple and extensive use case.
 .. image:: https://img.shields.io/pypi/pyversions/diary.svg?maxAge=2592000
    :target: https://pypi.python.org/pypi/diary/
 
+
 .. image:: https://img.shields.io/pypi/v/diary.svg?maxAge=2592000
    :target: https://pypi.python.org/pypi/diary/
 
